@@ -42,7 +42,7 @@ ewm = qrcode.QRCode(
     border=4,
 )
 # 设置二维码数据, 并添加到二维码中
-data = "https://www.baidu.com"
+data = "test, ok"
 ewm.add_data(data=data)
 # 更改二维码的颜色，默认是黑色。得到的结果是 PIL 图像对象
 ewm.make(fit=True) # 让二维码得到一个适合的大小值。
@@ -53,8 +53,9 @@ ewm_size_w ,ewm_size_h = ewm_size
  
 # 打开图标文件，并获取图标的大小，重新设定图标大小
 # 这里设置icon宽高为二维码的 6分之一。
-s = 6
-icon = Image.open("/Users/wangjiaxing/work/myqrcode/icons/icon.ico")
+
+s = 4
+icon = Image.open("/Users/wangjiaxing/work/myqrcode/icons/android-chrome-512x512.png")
 # 设置小图标的大小，缩放的时候尺寸必须是整数，否则报错
 icon_w,icon_h = int(ewm_size_w/s) ,int(ewm_size_h/s)
 icon_small = icon.resize( (icon_w ,icon_h) ,Image.LANCZOS)  # Image.ANTIALIAS 画面平滑缩放
