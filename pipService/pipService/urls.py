@@ -18,9 +18,10 @@ Including another URLconf
 """
 from django.urls import path
 
-from . import views
-
+from .views import piphome
+from pipline import views
   
 urlpatterns = [
-    path('runoob/', views.runoob),
+    path('pipinfos/', piphome.showinfo),
+    path('import/data/', views.import_pipelines_data),
 ]
