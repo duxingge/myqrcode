@@ -147,4 +147,5 @@ QRCODE_PIC_RESULT_PATH = f"{QRCODE_DATA}/qrcoderes"
 
 QRCODE_EXECEL_PATH = f"{QRCODE_DATA}/excel"
 
-QRCODE_SHOW_HOST = "http://192.168.31.108:8000/pipline/infos/"
+# QRCODE_SHOW_HOST = "http://192.168.31.108:8000/pipline/infos/"
+QRCODE_SHOW_HOST = "http://101.201.173.95:8000/pipline/infos/"
