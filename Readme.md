@@ -56,3 +56,17 @@ sqlite3
 <!-- 删除表 -->
 DROP TABLE pipelines;
 
+
+
+
+<!-- 部署相关 -->
+
+pip3 install uwsgi
+pip3 install django
+pip3 install pandas
+pip3 install qrcode
+sudo yum install zlib-devel
+sudo yum install libjpeg-devel
+pip3 install Pillow
+pip3 install openpyxl
+

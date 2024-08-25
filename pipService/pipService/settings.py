@@ -133,3 +133,5 @@ QRCODE_PIC_RESULT_PATH = "/Users/wangjiaxing/work/myqrcode/pipService/data/qrcod
 QRCODE_EXECEL_PATH = "/Users/wangjiaxing/work/myqrcode/pipService/data/excel"
 
 QRCODE_SHOW_HOST = "http://192.168.31.108:8000/pipline/infos/"
+
+HOME_PATH = "/Users/wangjiaxing/work/myqrcode/"

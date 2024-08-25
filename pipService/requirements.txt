@@ -1,0 +1,24 @@
+APScheduler==3.7.0
+asgiref==3.8.1
+backports.zoneinfo==0.2.1
+click==8.0.1
+Django==4.2.15
+Flask==2.0.1
+Flask-Login==0.5.0
+Flask-MySQLdb==0.2.0
+greenlet==1.1.0
+itsdangerous==2.0.1
+Jinja2==3.0.1
+MarkupSafe==2.0.0
+pycryptodome==3.9.9
+pymongo==3.11.3
+PyMySQL==1.0.2
+python-decouple==3.4
+pytz==2021.1
+six @ file:///AppleInternal/BuildRoot/Library/Caches/com.apple.xbs/Sources/python3/python3-110/six-1.15.0-py2.py3-none-any.whl
+SQLAlchemy==1.4.20
+sqlparse==0.5.1
+typing-extensions==4.12.2
+tzlocal==2.1
+UNKNOWN==2.0.3
+Werkzeug==2.0.0

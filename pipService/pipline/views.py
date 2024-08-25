@@ -17,7 +17,7 @@ def import_pipelines_data(request):
     FILE_PATH = f'{settings.QRCODE_EXECEL_PATH}/piplinedatas.xlsx'
 
     # 1. 读取Excel文件
-    df = pd.read_excel(FILE_PATH)
+    df = pd.read_excel(FILE_PATH,engine='openpyxl')
 
     # 2. 将数据插入到数据库表中
     for index, row in df.iterrows():
