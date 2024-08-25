@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '192.168.31.108',
+    '192.168.31.93'
 ]
 
 
@@ -129,9 +130,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 QRCODE_PIC_PREFIX = "QRCODE_PIC_"
 
-QRCODE_PIC_RESULT_PATH = "/Users/wangjiaxing/work/myqrcode/pipService/data/qrcoderes"
-QRCODE_EXECEL_PATH = "/Users/wangjiaxing/work/myqrcode/pipService/data/excel"
+QRCODE_PIC_RESULT_PATH = "/Users/wangjiawang/work/myqrcode/pipService/data/qrcoderes"
+QRCODE_EXECEL_PATH = "/Users/wangjiawang/work/myqrcode/pipService/data/excel"
 
-QRCODE_SHOW_HOST = "http://192.168.31.108:8000/pipline/infos/"
+QRCODE_SHOW_HOST = "http://192.168.31.93:8000/pipline/infos/"
 
-HOME_PATH = "/Users/wangjiaxing/work/myqrcode/"
+HOME_PATH = "/Users/wangjiawang/work/myqrcode/"
