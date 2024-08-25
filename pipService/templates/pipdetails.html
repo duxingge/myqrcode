@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gas</title>
+    <title>陕西燃气</title>
     <style>
 
         :root {
@@ -78,6 +78,11 @@
             font-size: 24px;
         }
 
+        .videoTitle {
+            width: 320px;
+            text-align: center;
+        }
+
 
     </style>
 </head>
@@ -86,7 +91,7 @@
 <div class="content">
     <div class="headerContainer">
         <div class="header">
-            <img src="/Users/wangjiawang/work/myqrcode/pipService/data/icons/shanxi_ranqi.png" width="100px" height="100px">
+            <img src="http://101.201.173.95:8000/static/shanxi_ranqi.png" width="100px" height="100px">
         </div>
         <div class="titleContainer">
             <span style="font-size: 30px">管线信息一览</span>
@@ -114,7 +119,7 @@
         </section>
 
 
-        <h4 id="phoneInformation" class="subTitle subTitleStyle">电话信息</h4>
+        <h4 id="phoneInformation" class="subTitle subTitleStyle">报警电话</h4>
         <section>
             <span id="company" class="label labelStyle">汉中分公司:</span><span class="labelDesc labelDescStyle">0916-2313112</span>
             <br>
@@ -129,8 +134,11 @@
         <span id="protection" class="label labelStyle">------《中华人民共和国石油天然气管道保护法》</span>
     </div>
     <div class="tab-content" id="safeEducation" style="display:none;">
-        <h3>Tab 2</h3>
-        <p>This is tab 2 content.</p>
+
+        <video id="video" src="http://101.201.173.95:8000//media/large_scale_construction.mp4" width="320" height="240" controls>
+            Your browser does not support the video tag.
+        </video>
+        <div class="videoTitle videoTitleStyle">宣传视频</div>
     </div>
 
 </div>
@@ -157,6 +165,28 @@
             }
         })
     }
+
+    function obtainVideoPath(str) {
+        var hash = 0;
+        if (str.length === 0) return hash;
+        for (var i = 0; i < str.length; i++) {
+            var char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash |= 0;
+        }
+        var index = hash %3;
+        if(index == 0) {
+            return "http://101.201.173.95:8000//media/large_scale_construction.mp4"
+        } else if(index == 1) {
+            return "http://101.201.173.95:8000//media/large_scale_construction.mp4"
+        } else {
+            return "http://101.201.173.95:8000//media/large_scale_construction.mp4"
+        }
+    }
+
+    var videoPath = obtainVideoPath(pipDetails.code)
+    document.getElementById('video').src = videoPath
+
 </script>
 </body>
 </html>
