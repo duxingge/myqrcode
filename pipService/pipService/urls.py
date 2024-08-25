@@ -26,4 +26,7 @@ urlpatterns = [
     path('pipinfos/', piphome.showinfo),
     path('pipline/import/data/', views.import_pipelines_data),
     path('pipline/infos/', pipdetails.getPipdetails),
+    path('pipline/infos/<str:code>/', pipdetails.getPipdetailsByCode),
+    path('pipline/create/qrcode/<str:code>/', pipdetails.createQrcode),
+    path('pipline/create/all/qrcodes/', pipdetails.createAllQrcode),
 ]

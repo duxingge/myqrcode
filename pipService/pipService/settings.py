@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-9#bsa5f8n2)=+h5atf7%o-q$e=a*)0@lnzoy%c8exl8=hk6%tk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '192.168.31.108',
+]
 
 
 # Application definition
@@ -122,3 +126,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+QRCODE_PIC_PREFIX = "QRCODE_PIC_"
+
+QRCODE_PIC_RESULT_PATH = "/Users/wangjiaxing/work/myqrcode/pipService/data/qrcoderes"
+
+QRCODE_SHOW_HOST = "http://192.168.31.108:8000/pipline/infos/"
