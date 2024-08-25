@@ -23,7 +23,6 @@ from .views import pipdetails
 from pipline import views
   
 urlpatterns = [
-    path('pipinfos/', piphome.showinfo),
     path('pipline/import/data/', views.import_pipelines_data),
     path('pipline/infos/', pipdetails.getPipdetails),
     path('pipline/infos/<str:code>/', pipdetails.getPipdetailsByCode),

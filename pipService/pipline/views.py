@@ -8,10 +8,13 @@ from django.http import HttpResponse
 from .models import Pipelines
 import pandas as pd
 from datetime import datetime
+from django.conf import settings
 
+
+# 导入Pipeline数据到数据库
 def import_pipelines_data(request):
     # Excel文件路径
-    FILE_PATH = '/Users/wangjiaxing/work/myqrcode/pipService/insertData/piplinedatas.xlsx'
+    FILE_PATH = f'{settings.QRCODE_EXECEL_PATH}/piplinedatas.xlsx'
 
     # 1. 读取Excel文件
     df = pd.read_excel(FILE_PATH)

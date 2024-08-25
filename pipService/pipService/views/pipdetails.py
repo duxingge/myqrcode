@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 
 def getPipdetails(request):
-    return render(request, 'pipdetails.html',{"pipDetails": views.getAllpiplines(request)})
+    return render(request, 'allpipdetails.html',{"pipDetails": views.getAllpiplines(request)})
 
 def getPipdetailsByCode(request, code):
     return render(request, 'pipdetails.html',{"pipDetails": views.get_pipeline_data_by_code(request, code)})
