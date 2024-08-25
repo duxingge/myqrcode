@@ -21,11 +21,18 @@ from django.urls import path
 from .views import piphome
 from .views import pipdetails
 from pipline import views
+from django.conf.urls.static import static
+from django.conf import settings
   
-urlpatterns = [
+
+
+urlpatterns = ([
     path('pipline/import/data/', views.import_pipelines_data),
     path('pipline/infos/', pipdetails.getPipdetails),
     path('pipline/infos/<str:code>/', pipdetails.getPipdetailsByCode),
     path('pipline/create/qrcode/<str:code>/', pipdetails.createQrcode),
     path('pipline/create/all/qrcodes/', pipdetails.createAllQrcode),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
++ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+)
+
