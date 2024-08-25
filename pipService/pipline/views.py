@@ -35,3 +35,15 @@ def import_pipelines_data(request):
         )
 
     return HttpResponse("数据已成功插入并更新到pipelines表中。")
+
+
+def get_pipelines_data(request):
+    # 获取所有Pipeline对象
+    allpips = Pipelines.objects.all()
+
+    codePipline = Pipelines.objects.filter(code='0096+1')[0]
+    # 获取codePipline[0]的所有属性和值
+
+    return codePipline
+
+    

@@ -1,2 +1,5 @@
 pipService/pipService/__pycache__/*
 pipService/pipService/views/__pycache__/*
+pipService/pipline/__pycache__/*
+pipService/pipline/migrations/*
+
