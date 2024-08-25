@@ -130,6 +130,8 @@ STATICFILES_DIRS = [
   
 MEDIA_URL = "/media/" 
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -140,7 +142,7 @@ QRCODE_PIC_PREFIX = "QRCODE_PIC_"
 QRCODE_DATA= "/Users/wangjiaxing/work/myqrcode/pipService/data/"
 
 QRCODE_PIC_RESULT_PATH = f"{QRCODE_DATA}/qrcoderes"
-MEDIA_ROOT = f"{QRCODE_DATA}/media/"
+
 QRCODE_EXECEL_PATH = f"{QRCODE_DATA}/excel"
 
 QRCODE_SHOW_HOST = "http://192.168.31.108:8000/pipline/infos/"
