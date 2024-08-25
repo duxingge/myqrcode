@@ -1,1 +1,162 @@
-<p>{{ pipDetails.name }}</p>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gas</title>
+    <style>
+
+        :root {
+            font-size: 20px;
+        }
+
+        .headerContainer {
+            height: 100px;
+            position: relative;
+        }
+        .header {
+            width: 100px;
+            position: absolute;
+        }
+        .titleContainer {
+            position: absolute;
+            height: 100px;
+            left: 120px;
+            text-align: center;
+            top: 20px;
+        }
+
+        .tab-content {
+            top:120px;
+            position: absolute;
+            padding-bottom: 150px;
+        }
+
+        #protection {
+            position: absolute;
+            left: 30px;
+        }
+
+        .footer {
+            position: fixed;
+            display: flex;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+            color: white;
+            text-align: center;
+            border-top: 1px solid #dddddd;
+        }
+
+        /* Style the tab */
+        .tab {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 17px;
+            color: black;
+
+        }
+
+        .active {
+            background-color: #007bff; /* 蓝色背景 */
+            color: white; /* 白色文字 */
+            font-size: 19px;
+        }
+
+        .subTitleStyle {
+            font-size: 30px;
+        }
+
+        .labelStyle {
+            font-size: 30px;
+        }
+        .labelDescStyle {
+            font-size: 24px;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <div class="headerContainer">
+        <div class="header">
+            <img src="/Users/wangjiawang/work/myqrcode/pipService/data/icons/shanxi_ranqi.png" width="100px" height="100px">
+        </div>
+        <div class="titleContainer">
+            <span style="font-size: 30px">管线信息一览</span>
+            <br>
+            <span style="font-size: 15px">桩号:</span><span style="font-size: 15px">{{ pipDetails.code }}</span>
+        </div>
+    </div>
+
+    <div class="tab-content" id="pipLine">
+        <h4 id="baseInformation" class="subTitle subTitleStyle">基础信息</h4>
+        <section>
+            <span id="pipLineName" class="label labelStyle">管线名称: </span><span class="labelDesc labelDescStyle">{{ pipDetails.name }}</span>
+            <br>
+            <span id="planeCorner" class="label labelStyle">平面转角:</span><span class="labelDesc labelDescStyle">{{ pipDetails.orientation }}</span>
+            <br>
+            <span id="mileage" class="label labelStyle">里程:</span><span class="labelDesc labelDescStyle">{{ pipDetails.length_km }}</span>
+            <br>
+            <span id="PipelineBurialDepth" class="label labelStyle">管线埋深:</span><span class="labelDesc labelDescStyle">{{ pipDetails.depth_m }}</span>
+            <br>
+            <span id="DistanceFromPipelineLocation" class="label labelStyle">离管道位置:</span><span class="labelDesc labelDescStyle">{{ pipDetails.distance_position_des }}</span>
+            <br>
+            <span id="wallThickness" class="label labelStyle">壁厚:</span><span class="labelDesc labelDescStyle">{{ pipDetails.wall_thickness_mm }}</span>
+            <br>
+            <span id="textureOfMaterial" class="label labelStyle">材质:</span><span class="labelDesc labelDescStyle">{{ pipDetails.material }}</span>
+        </section>
+
+
+        <h4 id="phoneInformation" class="subTitle subTitleStyle">电话信息</h4>
+        <section>
+            <span id="company" class="label labelStyle">汉中分公司:</span><span class="labelDesc labelDescStyle">0916-2313112</span>
+            <br>
+            <span id="dispatchDuty" class="label labelStyle">调度值班:</span><span class="labelDesc labelDescStyle">029-86510497</span>
+            <br>
+            <span id="freeAlarm" class="label labelStyle">免费报警:</span><span class="labelDesc labelDescStyle">800-8406666</span>
+        </section>
+        <h4 id="reminder" class="subTitle subTitleStyle">温馨提示</h4>
+        <section>
+            <span id="tip" class="label labelStyle">保护管道设施，维护管道安全，是每个公民应尽的义务。</span>
+        </section>
+        <span id="protection" class="label labelStyle">------《中华人民共和国石油天然气管道保护法》</span>
+    </div>
+    <div class="tab-content" id="safeEducation" style="display:none;">
+        <h3>Tab 2</h3>
+        <p>This is tab 2 content.</p>
+    </div>
+
+</div>
+
+<div class="footer">
+    <div  class="tab active" id="tab-pipLine" onclick="openTab('tab-pipLine', 'pipLine')" >管线信息</div>
+    <div  class="tab" id="tab-safeEducation" onclick="openTab('tab-safeEducation', 'safeEducation')">安全宣教</div>
+</div>
+
+<script>
+
+    function openTab(tabId, PageId) {
+        var tabs = document.getElementsByClassName("tab-content");
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].style.display = "none";
+        }
+        document.getElementById(PageId).style.display = "block"
+
+        document.querySelectorAll('.tab').forEach(function (tab) {
+            if (tab.id === tabId) {
+                tab.classList.add('active')
+            } else {
+                tab.classList.remove('active')
+            }
+        })
+    }
+</script>
+</body>
+</html>
