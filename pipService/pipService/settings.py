@@ -127,7 +127,7 @@ STATICFILES_DIRS = [
 	os.path.join(BASE_DIR, 'static')  # 此‘static’和创建的静态文件名称一致即可。
 ]
 
-MEDIA_ROOT = "/Users/wangjiaxing/work/myqrcode/pipService/data/media/"  
+  
 MEDIA_URL = "/media/" 
 
 # Default primary key field type
@@ -137,11 +137,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 QRCODE_PIC_PREFIX = "QRCODE_PIC_"
 
-QRCODE_PIC_RESULT_PATH = "/Users/wangjiaxing/work/myqrcode/pipService/data/qrcoderes"
-QRCODE_EXECEL_PATH = "/Users/wangjiaxing/work/myqrcode/pipService/data/excel"
+QRCODE_DATA= "/Users/wangjiaxing/work/myqrcode/pipService/data/"
+
+QRCODE_PIC_RESULT_PATH = f"{QRCODE_DATA}/qrcoderes"
+MEDIA_ROOT = f"{QRCODE_DATA}/media/"
+QRCODE_EXECEL_PATH = f"{QRCODE_DATA}/excel"
 
 QRCODE_SHOW_HOST = "http://192.168.31.108:8000/pipline/infos/"
-
 
 
 HOME_PATH = "/Users/wangjiaxing/work/myqrcode/"
