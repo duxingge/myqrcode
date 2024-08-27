@@ -7,28 +7,26 @@
     <style>
 
         :root {
-            font-size: 20px;
+            margin:32px;
         }
 
         .headerContainer {
-            height: 100px;
-            position: relative;
+            height:200px;
         }
+    
         .header {
-            width: 100px;
-            position: absolute;
+            float:left;
+            margin-right:10px;
         }
         .titleContainer {
-            position: absolute;
-            height: 100px;
-            left: 120px;
+            
             text-align: center;
-            top: 20px;
+            padding-top:40px;
         }
 
         .tab-content {
-            top:120px;
-            position: absolute;
+            width:100%;
+            top:200px;
             padding-bottom: 150px;
         }
 
@@ -43,7 +41,7 @@
             left: 0;
             bottom: 0;
             width: 100%;
-            height: 50px;
+            height: 100px;
             color: white;
             text-align: center;
             border-top: 1px solid #dddddd;
@@ -56,33 +54,56 @@
             align-items: center;
             justify-content: center;
             height: 100%;
-            font-size: 17px;
+            font-size: 24px;
             color: black;
+            background-color:white;
 
         }
 
         .active {
             background-color: #007bff; /* 蓝色背景 */
             color: white; /* 白色文字 */
-            font-size: 19px;
+            font-size: 28px;
         }
 
         .subTitleStyle {
-            font-size: 30px;
+            font-size: 40px;
         }
 
         .labelStyle {
-            font-size: 30px;
+            font-size: 36px;
         }
         .labelDescStyle {
-            font-size: 24px;
+            font-size: 36px;
+        }
+
+        .videoInfoContainer {
+            margin-top:100px;
+            display:flex;
+            justify-content: center;
+            height:100vh;
+        }
+
+        .videoContainer {
+            text-align: center;
+            width:80%;
         }
 
         .videoTitle {
-            width: 320px;
+            margin-top:20px;
+            padding-bottom:20px;
             text-align: center;
         }
 
+        video {
+            width: 100%;
+            height: auto;
+            border: 1px solid #333333;
+        }
+
+        .videoTitleStyle {
+            font-size: 24px;
+        }
 
     </style>
 </head>
@@ -91,54 +112,65 @@
 <div class="content">
     <div class="headerContainer">
         <div class="header">
-            <img src="http://101.201.173.95:8000/static/shanxi_ranqi.png" width="100px" height="100px">
+            <img src="http://101.201.173.95:8000/static/shanxi_ranqi.png" width="200px" height="200px">
         </div>
         <div class="titleContainer">
-            <span style="font-size: 30px">管线信息一览</span>
+            <span style="font-size: 60px" >管线信息一览</span>
             <br>
-            <span style="font-size: 15px">桩号:</span><span style="font-size: 15px">{{ pipDetails.code }}</span>
+            <span style="font-size: 30px">桩号:</span><span style="font-size: 30px">{{ pipDetails.code }}</span>
         </div>
+        
     </div>
 
     <div class="tab-content" id="pipLine">
         <h4 id="baseInformation" class="subTitle subTitleStyle">基础信息</h4>
+        
         <section>
             <span id="pipLineName" class="label labelStyle">管线名称: </span><span class="labelDesc labelDescStyle">{{ pipDetails.name }}</span>
             <br>
-            <span id="planeCorner" class="label labelStyle">平面转角:</span><span class="labelDesc labelDescStyle">{{ pipDetails.orientation }}</span>
+            <span id="planeCorner" class="label labelStyle">平面转角: </span><span class="labelDesc labelDescStyle">{{ pipDetails.orientation }}</span>
             <br>
-            <span id="mileage" class="label labelStyle">里程:</span><span class="labelDesc labelDescStyle">{{ pipDetails.length_km }}</span>
+            <span id="mileage" class="label labelStyle">里    程: </span><span class="labelDesc labelDescStyle">{{ pipDetails.length_km }}</span>
             <br>
-            <span id="PipelineBurialDepth" class="label labelStyle">管线埋深:</span><span class="labelDesc labelDescStyle">{{ pipDetails.depth_m }}</span>
+            <span id="PipelineBurialDepth" class="label labelStyle">管线埋深: </span><span class="labelDesc labelDescStyle">{{ pipDetails.depth_m }}</span>
             <br>
-            <span id="DistanceFromPipelineLocation" class="label labelStyle">离管道位置:</span><span class="labelDesc labelDescStyle">{{ pipDetails.distance_position_des }}</span>
+            <span id="DistanceFromPipelineLocation" class="label labelStyle">离管道位置: </span><span class="labelDesc labelDescStyle">{{ pipDetails.distance_position_des }}</span>
             <br>
-            <span id="wallThickness" class="label labelStyle">壁厚:</span><span class="labelDesc labelDescStyle">{{ pipDetails.wall_thickness_mm }}</span>
+            <span id="wallThickness" class="label labelStyle">壁厚: </span><span class="labelDesc labelDescStyle">{{ pipDetails.wall_thickness_mm }}</span>
             <br>
-            <span id="textureOfMaterial" class="label labelStyle">材质:</span><span class="labelDesc labelDescStyle">{{ pipDetails.material }}</span>
+            <span id="textureOfMaterial" class="label labelStyle">材质: </span><span class="labelDesc labelDescStyle">{{ pipDetails.material }}</span>
         </section>
-
 
         <h4 id="phoneInformation" class="subTitle subTitleStyle">报警电话</h4>
+
         <section>
-            <span id="company" class="label labelStyle">汉中分公司:</span><span class="labelDesc labelDescStyle">0916-2313112</span>
+            <span id="company" class="label labelStyle">汉中分公司: </span><span class="labelDesc labelDescStyle">0916-2313112</span>
             <br>
-            <span id="dispatchDuty" class="label labelStyle">调度值班:</span><span class="labelDesc labelDescStyle">029-86510497</span>
+            <span id="dispatchDuty" class="label labelStyle">调度值班: </span><span class="labelDesc labelDescStyle">029-86510497</span>
             <br>
-            <span id="freeAlarm" class="label labelStyle">免费报警:</span><span class="labelDesc labelDescStyle">800-8406666</span>
+            <span id="freeAlarm" class="label labelStyle">免费报警: </span><span class="labelDesc labelDescStyle">800-8406666</span>
         </section>
+
         <h4 id="reminder" class="subTitle subTitleStyle">温馨提示</h4>
+
         <section>
             <span id="tip" class="label labelStyle">保护管道设施，维护管道安全，是每个公民应尽的义务。</span>
         </section>
+
         <span id="protection" class="label labelStyle">------《中华人民共和国石油天然气管道保护法》</span>
     </div>
     <div class="tab-content" id="safeEducation" style="display:none;">
+        <div class="videoInfoContainer">
+            <div class="videoContainer">
+                <video id="video"  controls>
+                    Your browser does not support the video tag.
+                </video>
+                
+                <div class="videoTitle videoTitleStyle">宣传视频</div>
+            </div>
 
-        <video id="video" src="http://101.201.173.95:8000//media/large_scale_construction.mp4" width="320" height="240" controls>
-            Your browser does not support the video tag.
-        </video>
-        <div class="videoTitle videoTitleStyle">宣传视频</div>
+            
+        </div>
     </div>
 
 </div>
@@ -149,19 +181,20 @@
 </div>
 
 <script>
+    
 
     function openTab(tabId, PageId) {
         var tabs = document.getElementsByClassName("tab-content");
         for (var i = 0; i < tabs.length; i++) {
             tabs[i].style.display = "none";
         }
-        document.getElementById(PageId).style.display = "block"
+        document.getElementById(PageId).style.display = "block";
 
         document.querySelectorAll('.tab').forEach(function (tab) {
             if (tab.id === tabId) {
-                tab.classList.add('active')
+                tab.classList.add('active');
             } else {
-                tab.classList.remove('active')
+                tab.classList.remove('active');
             }
         })
     }
@@ -174,18 +207,20 @@
             hash = ((hash << 5) - hash) + char;
             hash |= 0;
         }
-        var index = hash %3;
-        if(index == 0) {
-            return "http://101.201.173.95:8000//media/large_scale_construction.mp4"
+        var index = hash % 3;
+        if(index === 0) {
+            return "http://101.201.173.95:8000//media/large_scale_construction.mp4";
         } else if(index == 1) {
-            return "http://101.201.173.95:8000//media/large_scale_construction.mp4"
+            return "http://101.201.173.95:8000//media/pipline_protect.mp4";
         } else {
-            return "http://101.201.173.95:8000//media/large_scale_construction.mp4"
+            return "http://101.201.173.95:8000//media/security_allance.mp4";
         }
     }
 
-    var videoPath = obtainVideoPath(pipDetails.code)
-    document.getElementById('video').src = videoPath
+    var code = "{{pipDetails.code|escapejs}}"
+    var videoPath = obtainVideoPath(code);
+    
+    document.getElementById('video').src = videoPath;
 
 </script>
 </body>
