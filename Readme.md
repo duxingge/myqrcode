@@ -65,8 +65,13 @@ pip3 install uwsgi
 pip3 install django
 pip3 install pandas
 pip3 install qrcode
-sudo yum install zlib-devel
-sudo yum install libjpeg-devel
+sudo yum install zlib-devel 
 pip3 install Pillow
 pip3 install openpyxl
 
+
+<!-- 项目相关 -->
+
+<!-- 生成二维码 -->
+http://localhost:8001/pipline/create/qrcode/0096+1/
+http://localhost:8001/pipline/infos/0096+1/
