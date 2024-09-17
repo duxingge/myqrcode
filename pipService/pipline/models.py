@@ -19,3 +19,4 @@ class Pipelines(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
     qr_code_url = models.URLField(max_length=200, null=True, blank=True, verbose_name='二维码地址')
+    pipe_group  = models.CharField(max_length=255, verbose_name='汉安线')

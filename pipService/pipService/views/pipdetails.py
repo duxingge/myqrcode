@@ -17,8 +17,7 @@ def getPipdetailsByCode(request, code):
     return render(request, 'pipdetails.html',{"pipDetails": views.get_pipeline_data_by_code(request, code)})
 
 def createQrcode(request, code):
-    qrcodehelp.createQrcode(code)
-
+    qrcodehelp.createQrcode(request, code)
     return HttpResponse("<p>生成成功</p>")
 
 
@@ -35,7 +34,7 @@ def downloadQrcode(request, code):
 
     # 检查文件是否存在
     if not os.path.exists(qr_file_path):
-        qrcodehelp.createQrcode(code)
+        qrcodehelp.createQrcode(request, code)
     
 
     # 使用 FileResponse 返回图片，并设置 Content-Disposition 头为 attachment 强制下载

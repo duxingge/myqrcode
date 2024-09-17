@@ -33,6 +33,7 @@ def import_pipelines_data(request):
                 'wall_thickness_mm': row.get('wall_thickness_mm', None),
                 'material': row.get('material', ''),
                 'qr_code_url': row.get('qr_code_url', None),
+                'pipe_group': row.get('pipe_group', None),
                 'updated_at': datetime.now(),  # 每次更新或创建时更新updated_at
             }
         )

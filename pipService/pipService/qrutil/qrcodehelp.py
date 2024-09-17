@@ -1,8 +1,9 @@
 import qrcode
 from PIL import Image, ImageDraw, ImageFont
 from django.conf import settings
+from pipline import views
 
-def createQrcode(pipCode):
+def createQrcode(request,pipCode):
     # 创建QRCode对象
     ewm = qrcode.QRCode(
         version=5,
@@ -11,6 +12,8 @@ def createQrcode(pipCode):
         border=4,
     )
     
+    pipinfos = views.get_pipeline_data_by_code(request, pipCode)
+    title = pipinfos.pipe_group+ '管道信息'
     # 设置二维码数据
     data = settings.QRCODE_SHOW_HOST + pipCode + '/'
     ewm.add_data(data=data)
@@ -53,13 +56,13 @@ def createQrcode(pipCode):
     # 绘制文字
     draw.text(text_position, text, fill="black", font=font)
 
-
+    
     # 加载背景图片
-    background = Image.open(f"{settings.BASE_DIR}/data/icons/pipe_back4.jpg")
+    background = Image.open(f"{settings.BASE_DIR}/data/icons/pipe_back5.jpg")
     bg_w, bg_h = background.size
 
     # 将背景图片放大2倍
-    background = background.resize((bg_w * 2 - 660, bg_h * 2-700), Image.LANCZOS)
+    background = background.resize((bg_w * 2 - 360, bg_h * 2-200), Image.LANCZOS)
     bg_w, bg_h = background.size 
     
     # 将二维码粘贴到背景图的中心
@@ -68,7 +71,22 @@ def createQrcode(pipCode):
     background.paste(extended_img, (qr_x, qr_y))
     
     draw = ImageDraw.Draw(background)
+
+
+
+    # 绘制标题
     
+    titlefont_path = f"{settings.BASE_DIR}/data/font/simhei2.ttf"  # 替换为支持中文的字体路径
+    title_font_size = 100  # 设置字体大小
+    title_font = ImageFont.truetype(titlefont_path, title_font_size)  # 加载字体
+    
+    title_bbox = draw.textbbox((0, 0), title, font=title_font)
+    title_text_w = title_bbox[2] - title_bbox[0]
+    title_text_h = title_bbox[3] - title_bbox[1]
+    title_position = ((bg_w-title_text_w) // 2 , 150)  # 文本位置，在二维码下方
+
+    draw.text(title_position, title, fill="black", font=title_font)
+
     # 将图像转换为RGB模式再保存为JPEG
     background = background.convert("RGB")
 

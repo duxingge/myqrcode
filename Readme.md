@@ -79,3 +79,6 @@ http://localhost:8001/pipline/infos/0096+1/
 http://localhost:8001/pipline/infos/download/code/0096+1/
 
 http://localhost:8001/pipline/create/all/qrcodes/
+
+<!-- 导入数据 -->
+http://localhost:8001/pipline/import/data/
