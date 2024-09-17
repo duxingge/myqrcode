@@ -18,8 +18,8 @@
             float:left;
             margin-right:10px;
         }
-        .titleContainer {
-            
+
+        .TitleContainer {
             text-align: center;
             padding-top:40px;
         }
@@ -27,6 +27,7 @@
         .tab-content {
             width:100%;
             top:200px;
+            line-height:1.5;
             padding-bottom: 150px;
         }
 
@@ -70,7 +71,16 @@
             font-size: 40px;
         }
 
-        .labelStyle {
+        .labelStyle2 {
+            font-size: 36px;
+            letter-spacing: 0.38em;
+        }
+
+        .labelStyle4 {
+            font-size: 36px;
+            letter-spacing: 0.35em;
+        }
+        .labelStyleNormal {
             font-size: 36px;
         }
         .labelDescStyle {
@@ -78,7 +88,7 @@
         }
 
         .videoInfoContainer {
-            margin-top:100px;
+            margin-top:400px;
             display:flex;
             justify-content: center;
             height:100vh;
@@ -114,10 +124,16 @@
         <div class="header">
             <img src="http://101.201.173.95:8000/static/shanxi_ranqi.png" width="200px" height="200px">
         </div>
-        <div class="titleContainer">
-            <span style="font-size: 60px" >管线信息一览</span>
+        <div id="tab1Title" class="TitleContainer">
+            <span id="pageTitle" style="font-size: 60px" >管线信息一览</span>
             <br>
-            <span style="font-size: 30px">桩号:</span><span style="font-size: 30px">{{ pipDetails.code }}</span>
+            <span id="titleDesc1" style="font-size: 30px">桩号:</span><span id="titleDesc2" style="font-size: 30px">{{ pipDetails.code }}</span>
+        </div>
+
+        <div id="tab2Title" class="TitleContainer">
+            <span id="pageTitle" style="font-size: 60px" >宣教视频</span>
+            <br>
+            <span id="titleDesc1" style="font-size: 30px">爱护管道&nbsp</span><span id="titleDesc2" style="font-size: 30px">共筑安全</span>
         </div>
         
     </div>
@@ -126,38 +142,38 @@
         <h4 id="baseInformation" class="subTitle subTitleStyle">基础信息</h4>
         
         <section>
-            <span id="pipLineName" class="label labelStyle">管线名称: </span><span class="labelDesc labelDescStyle">{{ pipDetails.name }}</span>
+            <span id="pipLineName" class="label labelStyle4">管线名称:</span><span class="labelDesc labelDescStyle">{{ pipDetails.name }}</span>
             <br>
-            <span id="planeCorner" class="label labelStyle">平面转角: </span><span class="labelDesc labelDescStyle">{{ pipDetails.orientation }}</span>
+            <span id="planeCorner" class="label labelStyle4">平面转角:</span><span class="labelDesc labelDescStyle">{{ pipDetails.orientation }}</span>
             <br>
-            <span id="mileage" class="label labelStyle">里    程: </span><span class="labelDesc labelDescStyle">{{ pipDetails.length_km }}</span>
+            <span id="mileage" class="label labelStyle2">里&nbsp&nbsp&nbsp&nbsp程:</span><span class="labelDesc labelDescStyle">{{ pipDetails.length_km }}</span>
             <br>
-            <span id="PipelineBurialDepth" class="label labelStyle">管线埋深: </span><span class="labelDesc labelDescStyle">{{ pipDetails.depth_m }}</span>
+            <span id="PipelineBurialDepth" class="label labelStyle4">管线埋深:</span><span class="labelDesc labelDescStyle">{{ pipDetails.depth_m }}m</span>
             <br>
-            <span id="DistanceFromPipelineLocation" class="label labelStyle">离管道位置: </span><span class="labelDesc labelDescStyle">{{ pipDetails.distance_position_des }}</span>
+            <span id="DistanceFromPipelineLocation" class="label labelStyleNormal">离管道位置:</span><span class="labelDesc labelDescStyle">{{ pipDetails.distance_position_des}}m</span>
             <br>
-            <span id="wallThickness" class="label labelStyle">壁厚: </span><span class="labelDesc labelDescStyle">{{ pipDetails.wall_thickness_mm }}</span>
+            <span id="wallThickness" class="label labelStyle2">壁&nbsp&nbsp&nbsp&nbsp厚:</span><span class="labelDesc labelDescStyle">{{ pipDetails.wall_thickness_mm }}</span>
             <br>
-            <span id="textureOfMaterial" class="label labelStyle">材质: </span><span class="labelDesc labelDescStyle">{{ pipDetails.material }}</span>
+            <span id="textureOfMaterial" class="label labelStyle2">材&nbsp&nbsp&nbsp&nbsp质:</span><span class="labelDesc labelDescStyle">{{ pipDetails.material }}</span>
         </section>
 
         <h4 id="phoneInformation" class="subTitle subTitleStyle">报警电话</h4>
 
         <section>
-            <span id="company" class="label labelStyle">汉中分公司: </span><span class="labelDesc labelDescStyle">0916-2313112</span>
+            <span id="company" class="label labelStyleNormal">汉中分公司:</span><span class="labelDesc labelDescStyle">0916-2313112</span>
             <br>
-            <span id="dispatchDuty" class="label labelStyle">调度值班: </span><span class="labelDesc labelDescStyle">029-86510497</span>
+            <span id="dispatchDuty" class="label labelStyle4">调度值班:</span><span class="labelDesc labelDescStyle">029-86510497</span>
             <br>
-            <span id="freeAlarm" class="label labelStyle">免费报警: </span><span class="labelDesc labelDescStyle">800-8406666</span>
+            <span id="freeAlarm" class="label labelStyle4">免费报警:</span><span class="labelDesc labelDescStyle">800-8406666</span>
         </section>
 
         <h4 id="reminder" class="subTitle subTitleStyle">温馨提示</h4>
 
         <section>
-            <span id="tip" class="label labelStyle">保护管道设施，维护管道安全，是每个公民应尽的义务。</span>
+            <span id="tip" class="label labelStyle4">保护管道设施，维护管道安全，是每个公民应尽的义务。</span>
         </section>
 
-        <span id="protection" class="label labelStyle">------《中华人民共和国石油天然气管道保护法》</span>
+        <span id="protection" class="label labelStyle4">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp------《中华人民共和国石油天然气管道保护法》</span>
     </div>
     <div class="tab-content" id="safeEducation" style="display:none;">
         <div class="videoInfoContainer">
@@ -197,6 +213,14 @@
                 tab.classList.remove('active');
             }
         })
+        if(tabId == 'tab-pipLine') {
+            document.getElementById('tab2Title').style.display = "none";
+            document.getElementById('tab1Title').style.display = "block";
+
+        } else if(tabId == 'tab-safeEducation') {
+            document.getElementById('tab1Title').style.display = "none";
+            document.getElementById('tab2Title').style.display = "block";
+        }
     }
 
     function obtainVideoPath(str) {
@@ -221,6 +245,8 @@
     var videoPath = obtainVideoPath(code);
     
     document.getElementById('video').src = videoPath;
+    document.getElementById('tab2Title').style.display = "none";
+    document.getElementById('tab1Title').style.display = "block";
 
 </script>
 </body>
