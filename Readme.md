@@ -72,6 +72,8 @@ pip3 install openpyxl
 
 <!-- 项目相关 -->
 
+<!-- excel生成sqllite 数据 -->
+http://101.201.173.95:8000/pipline/import/data/
 <!-- 生成二维码 -->
 http://localhost:8001/pipline/create/qrcode/0096+1/
 http://localhost:8001/pipline/infos/0096+1/

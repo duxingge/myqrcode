@@ -24,7 +24,7 @@ def createQrcode(request, code):
 def createAllQrcode(request):
     allpips = views.getAllpiplines(request)
     for pip in allpips:
-        qrcodehelp.createQrcode(pip.code)
+        qrcodehelp.createQrcode(request, pip.code)
     return HttpResponse("<p>所有二维码生成成功</p>")
 
 
