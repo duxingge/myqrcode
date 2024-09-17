@@ -5,4 +5,4 @@ pipService/pipline/migrations/*
 pipService/data/qrcoderes/*
 
 pipService/pipline/__pycache__/*
-pipService/pipService/qrutil/__pycache__/qrcodehelp.cpython-39.pyc
+pipService/pipService/qrutil/__pycache__/*
