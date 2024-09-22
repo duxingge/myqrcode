@@ -36,7 +36,7 @@
             left: 30px;
         }
 
-        .footer {
+        .footerButton {
             position: fixed;
             display: flex;
             left: 0;
@@ -46,6 +46,31 @@
             color: white;
             text-align: center;
             border-top: 1px solid #dddddd;
+        }
+
+        .footer {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .recordNumber {
+            position: fixed;
+            font-size:16px;
+            color:grey;
+            transition:color 0.3s;
+            left: 0;
+            bottom: 100px;
+            padding:5px;
+            width: 100%;
+            height: 30px;
+            text-align: center;
+            background-color:white;
+        
+        }
+        .recordNumber:hover{
+            color:black;
         }
 
         /* Style the tab */
@@ -174,6 +199,8 @@
         </section>
 
         <span id="protection" class="label labelStyle4">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp------《中华人民共和国石油天然气管道保护法》</span>
+
+        
     </div>
     <div class="tab-content" id="safeEducation" style="display:none;">
         <div class="videoInfoContainer">
@@ -192,9 +219,17 @@
 </div>
 
 <div class="footer">
-    <div  class="tab active" id="tab-pipLine" onclick="openTab('tab-pipLine', 'pipLine')" >管线信息</div>
-    <div  class="tab" id="tab-safeEducation" onclick="openTab('tab-safeEducation', 'safeEducation')">安全宣教</div>
+    <div>
+        <a href="https://beian.miit.gov.cn" class="recordNumber">陕ICP备2024049204号-1</a>
+    </div> 
+   
+     <div class="footerButton">
+        <div  class="tab active" id="tab-pipLine" onclick="openTab('tab-pipLine', 'pipLine')" >管线信息</div>
+        <div  class="tab" id="tab-safeEducation" onclick="openTab('tab-safeEducation', 'safeEducation')">安全宣教</div>
+    </div> 
 </div>
+
+
 
 <script>
     
