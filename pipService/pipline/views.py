@@ -9,12 +9,14 @@ from .models import Pipelines
 import pandas as pd
 from datetime import datetime
 from django.conf import settings
-
+from .forms import UploadFileForm
+from .models import UploadedFile
+import os
 
 # 导入Pipeline数据到数据库
 def import_pipelines_data(request):
     # Excel文件路径
-    FILE_PATH = f'{settings.QRCODE_EXECEL_PATH}/piplinedatas.xlsx'
+    FILE_PATH = f'{settings.MEDIA_ROOT}/uploads/piplinedatas.xlsx'
 
     # 1. 读取Excel文件
     df = pd.read_excel(FILE_PATH,engine='openpyxl')
@@ -51,3 +53,30 @@ def get_pipeline_data_by_code(request, qCode):
     # 根据code获取Pipeline对象
     pip = Pipelines.objects.filter(code=qCode)[0]
     return pip
+
+
+# 处理文件上传
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            FILE_PATH = f'{settings.MEDIA_ROOT}/uploads/piplinedatas.xlsx'
+
+            # 删除文件
+            if os.path.exists(FILE_PATH):
+                os.remove(FILE_PATH)
+
+            # 获取上传的文件
+            uploaded_file = request.FILES['file']
+            original_name = uploaded_file.name
+            uploaded_file.name = 'piplinedatas.xlsx';
+            # 将文件保存到数据库中
+            instance = UploadedFile(file=uploaded_file)
+            instance.save()
+            import_pipelines_data(request)
+
+            return HttpResponse(f'文件 "{original_name}" 上传成功')
+    else:
+        form = UploadFileForm()
+    return render(request, 'pipemanager.html', {'form': form})

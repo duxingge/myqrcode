@@ -8,13 +8,35 @@ import io
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.http import FileResponse
-
+import json
+from django.core import serializers
+from django.shortcuts import get_object_or_404
+from django.forms.models import model_to_dict
+from django.db import models
 
 def getPipdetails(request):
     return render(request, 'allpipdetails.html',{"pipDetails": views.getAllpiplines(request)})
 
 def getPipdetailsByCode(request, code):
     return render(request, 'pipdetails.html',{"pipDetails": views.get_pipeline_data_by_code(request, code)})
+
+def getPipdetailStrByCode(request, code):
+    pipeline_data = views.get_pipeline_data_by_code(request, code)
+
+    # 如果 pipeline_data 是 QuerySet 或 Django 模型实例，需将其转换为可序列化的格式
+    if isinstance(pipeline_data, models.Model):  # 如果是单个模型实例
+        # 将对象转换为字典
+        pipeline_data = model_to_dict(pipeline_data)
+    elif hasattr(pipeline_data, '__iter__'):  # 检查是否为可迭代对象（如 QuerySet）
+        pipeline_data = list(pipeline_data.values())  # 转换为字典列表
+
+    # 将数据转换为 JSON 字符串
+    pipDetails = json.dumps(pipeline_data, ensure_ascii=False)
+
+    # 返回 HttpResponse 并指定 Content-Type 为 application/json
+    return HttpResponse(pipDetails, content_type='application/json')
+
+
 
 def createQrcode(request, code):
     qrcodehelp.createQrcode(request, code)

@@ -84,3 +84,10 @@ http://localhost:8001/pipline/create/all/qrcodes/
 
 <!-- 导入数据 -->
 http://localhost:8001/pipline/import/data/
+
+http://101.201.173.95:8000
+单个下载：
+   /pipline/infos/download/code/0096+1/
+全部下载：
+   /pipline/infos/download/all/
+   /pipline/infos/str/0096+1/

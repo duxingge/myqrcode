@@ -3,6 +3,12 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+from django.conf import settings
+
+import os
+
+
+
 # Create your models here.
 
 
@@ -20,3 +26,10 @@ class Pipelines(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
     qr_code_url = models.URLField(max_length=200, null=True, blank=True, verbose_name='二维码地址')
     pipe_group  = models.CharField(max_length=255, verbose_name='汉安线')
+
+
+class UploadedFile(models.Model):
+    
+    file = models.FileField(upload_to='uploads/')  # 文件将上传到 'uploads/' 目录
+     
+    uploaded_at = models.DateTimeField(auto_now_add=True)  # 上传时间
