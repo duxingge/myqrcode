@@ -1,15 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>上传文件</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Manager</title>
+    <style>
+        .tab { display: none; }
+        .tab-button { cursor: pointer; }
+        .active { display: block; }
+    </style>
 </head>
 <body>
-    <h1>上传文件</h1>
+    <h1>Pipeline Manager</h1>
+    
+    <!-- Tab Buttons -->
+    <div>
+        <button class="tab-button" onclick="showTab('list')">Pipeline List</button>
+        <button class="tab-button" onclick="showTab('upload')">Upload File</button>
+    </div>
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">上传</button>
-    </form>
+    <!-- Tab Contents -->
+    <div id="list" class="tab active">
+        <h2>Pipeline List</h2>
+        
+        <!-- 查询表单 -->
+        <form action="" method="get">
+            <label for="code">Enter Code:</label>
+            <input type="text" id="code" name="code" value="{{ searched_code }}">
+            <button type="submit">Search</button>
+        </form>
+
+        <h2>Pipelines</h2>
+        <ul>
+            {% for pipeline in pipelines %}
+                <li>{{ pipeline.name }} - Code: {{ pipeline.code }}</li>
+            {% empty %}
+                <li>No pipelines found.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- 分页 -->
+        <div>
+            <form action="" method="get">
+                <input type="hidden" name="code" value="{{ searched_code }}">
+                <label for="page">Page:</label>
+                <input type="number" id="page" name="page" value="{{ current_page }}" min="1" max="{{ total_pages }}">
+                <button type="submit">Go</button>
+            </form>
+
+            {% if previous_page_url %}
+                <a href="{{ previous_page_url }}">Previous</a>
+            {% endif %}
+            <span>Page {{ current_page }} of {{ total_pages }}</span>
+            {% if next_page_url %}
+                <a href="{{ next_page_url }}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="upload" class="tab">
+        <h2>Upload File</h2>
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+        <form action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="file" required>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            var tabs = document.querySelectorAll('.tab');
+            tabs.forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+
+            // Show the selected tab
+            document.getElementById(tabName).classList.add('active');
+        }
+    </script>
 </body>
 </html>

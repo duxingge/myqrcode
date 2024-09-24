@@ -23,14 +23,15 @@ from .views import pipdetails
 from pipline import views
 from django.conf.urls.static import static
 from django.conf import settings
-  
+from .views.pipdetails import PipelineListView
 
 
 urlpatterns = ([
     path('pipline/import/data/', views.import_pipelines_data),
     path('pipline/infos/', pipdetails.getPipdetails),
     path('pipline/infos/<str:code>/', pipdetails.getPipdetailsByCode),
-    path('pipline/infos/str/<str:code>/', pipdetails.getPipdetailStrByCode),
+    path('pipline/info/str/<str:code>/', pipdetails.getPipdetailStrByCode),
+    path('pipline/manager/', PipelineListView.as_view(), name='pipeline_manager'),
     path('pipline/create/qrcode/<str:code>/', pipdetails.createQrcode),
     path('pipline/create/all/qrcodes/', pipdetails.createAllQrcode),
     path('pipline/infos/download/code/<str:code>/', pipdetails.downloadQrcode),

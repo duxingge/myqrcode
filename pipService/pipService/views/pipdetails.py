@@ -14,6 +14,14 @@ from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.db import models
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
+from pipline.models import Pipelines
+# from pipline.serializers import PipelineInfoSerializer
+from django.shortcuts import render
+
+
 def getPipdetails(request):
     return render(request, 'allpipdetails.html',{"pipDetails": views.getAllpiplines(request)})
 
@@ -95,3 +103,28 @@ def downloadAllQrcode(request):
     response['Content-Disposition'] = 'attachment; filename="all_qrcodes.zip"'
 
     return response
+
+class PipelineListView(APIView):
+    def get(self, request):
+        page_size = request.GET.get('page_size', 10)
+        page_number = request.GET.get('page', 1)
+        paginator = PageNumberPagination()
+        paginator.page_size = int(page_size)
+
+        # 按 code 查询的部分
+        code = request.GET.get('code')
+        if code:
+            queryset = Pipelines.objects.filter(code=code)
+        else:
+            queryset = Pipelines.objects.all()
+
+        results = paginator.paginate_queryset(queryset, request)
+
+        return render(request, 'pipemanager.html', {
+            'pipelines': results,
+            'previous_page_url': paginator.get_previous_link(),
+            'next_page_url': paginator.get_next_link(),
+            'current_page': paginator.page.number,
+            'total_pages': paginator.page.paginator.num_pages,
+            'searched_code': code,
+        })
