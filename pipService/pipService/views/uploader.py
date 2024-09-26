@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import UploadFileForm
 from .models import UploadedFile
+from django.contrib.auth.decorators import login_required
 
 # 处理文件上传
+@login_required
 def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)

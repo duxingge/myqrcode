@@ -18,7 +18,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import piphome
+from .views import loginHome
 from .views import pipdetails
 from pipline import views
 from django.conf.urls.static import static
@@ -28,9 +28,15 @@ from .views.pipdetails import PipelineListView
 
 urlpatterns = ([
     path('pipline/import/data/', views.import_pipelines_data),
-    path('pipline/infos/', pipdetails.getPipdetails),
+    path('accounts/login/', loginHome.login_view, name='login'),
+    path('pipline/logout/', loginHome.logout_view, name='logout'),
+    path('accounts/init/', loginHome.create_user, name='create_user'),
+    # path('pipline/infos/', pipdetails.getPipdetails),
+    # 查看pip视图
     path('pipline/infos/<str:code>/', pipdetails.getPipdetailsByCode),
+    # 查询pip信息json
     path('pipline/info/str/<str:code>/', pipdetails.getPipdetailStrByCode),
+    # 列表查询管理
     path('pipline/manager/', PipelineListView.as_view(), name='pipeline_manager'),
     path('pipline/create/qrcode/<str:code>/', pipdetails.createQrcode),
     path('pipline/create/all/qrcodes/', pipdetails.createAllQrcode),

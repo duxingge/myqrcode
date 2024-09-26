@@ -20,14 +20,20 @@ from rest_framework.pagination import PageNumberPagination
 from pipline.models import Pipelines
 # from pipline.serializers import PipelineInfoSerializer
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+
 
 
 def getPipdetails(request):
     return render(request, 'allpipdetails.html',{"pipDetails": views.getAllpiplines(request)})
 
+@login_required
 def getPipdetailsByCode(request, code):
     return render(request, 'pipdetails.html',{"pipDetails": views.get_pipeline_data_by_code(request, code)})
 
+@login_required
 def getPipdetailStrByCode(request, code):
     pipeline_data = views.get_pipeline_data_by_code(request, code)
 
@@ -45,19 +51,19 @@ def getPipdetailStrByCode(request, code):
     return HttpResponse(pipDetails, content_type='application/json')
 
 
-
+@login_required
 def createQrcode(request, code):
     qrcodehelp.createQrcode(request, code)
     return HttpResponse("<p>生成成功</p>")
 
-
+@login_required
 def createAllQrcode(request):
     allpips = views.getAllpiplines(request)
     for pip in allpips:
         qrcodehelp.createQrcode(request, pip.code)
     return HttpResponse("<p>所有二维码生成成功</p>")
 
-
+@login_required
 def downloadQrcode(request, code):
     # 构造二维码图片的文件路径
     qr_file_path = os.path.join(settings.BASE_DIR, 'data', 'qrcoderes', f'QRCODE_PIC_{code}.jpg')
@@ -74,7 +80,7 @@ def downloadQrcode(request, code):
 
 
     
-
+@login_required
 def downloadAllQrcode(request):
     # 定义二维码图片存储目录
     qr_folder_path = os.path.join(settings.BASE_DIR, 'data', 'qrcoderes')
@@ -104,6 +110,8 @@ def downloadAllQrcode(request):
 
     return response
 
+
+@method_decorator(login_required, name='dispatch')
 class PipelineListView(APIView):
     def get(self, request):
         page_size = request.GET.get('page_size', 10)
