@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw, ImageFont
 from django.conf import settings
 from pipline import views
 
-def createQrcode(request,pipCode):
+def createQrcode(request,pipeGroup,pipCode):
     # 创建QRCode对象
     ewm = qrcode.QRCode(
         version=5,
@@ -91,5 +91,5 @@ def createQrcode(request,pipCode):
     background = background.convert("RGB")
 
     # 显示并保存生成的图片
-    background.show()
-    background.save(f"{settings.QRCODE_PIC_RESULT_PATH}/{settings.QRCODE_PIC_PREFIX}{pipCode}.jpg")
+    # background.show()
+    background.save(f"{settings.QRCODE_PIC_RESULT_PATH}/{settings.QRCODE_PIC_PREFIX}{pipeGroup}{pipCode}.jpg")

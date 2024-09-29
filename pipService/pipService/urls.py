@@ -42,7 +42,7 @@ urlpatterns = ([
     path('pipline/create/all/qrcodes/', pipdetails.createAllQrcode),
     path('pipline/infos/download/code/<str:code>/', pipdetails.downloadQrcode),
     path('pipline/infos/download/all/', pipdetails.downloadAllQrcode),
-    path('pipline/upload/', views.upload_file, name='upload_file'),
+    path('pipline/upload/', pipdetails.uploadfile, name='upload_file'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )

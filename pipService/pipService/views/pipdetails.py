@@ -25,11 +25,11 @@ from django.utils.decorators import method_decorator
 
 
 
-
+@login_required
 def getPipdetails(request):
     return render(request, 'allpipdetails.html',{"pipDetails": views.getAllpiplines(request)})
 
-@login_required
+
 def getPipdetailsByCode(request, code):
     return render(request, 'pipdetails.html',{"pipDetails": views.get_pipeline_data_by_code(request, code)})
 
@@ -53,14 +53,15 @@ def getPipdetailStrByCode(request, code):
 
 @login_required
 def createQrcode(request, code):
-    qrcodehelp.createQrcode(request, code)
+    pipe = views.get_pipeline_data_by_code(request, code)
+    qrcodehelp.createQrcode(request, pipe.pipe_group, code)
     return HttpResponse("<p>生成成功</p>")
 
 @login_required
 def createAllQrcode(request):
     allpips = views.getAllpiplines(request)
     for pip in allpips:
-        qrcodehelp.createQrcode(request, pip.code)
+        qrcodehelp.createQrcode(request, pip.pipe_group,pip.code)
     return HttpResponse("<p>所有二维码生成成功</p>")
 
 @login_required
@@ -70,7 +71,8 @@ def downloadQrcode(request, code):
 
     # 检查文件是否存在
     if not os.path.exists(qr_file_path):
-        qrcodehelp.createQrcode(request, code)
+        pipe = views.get_pipeline_data_by_code(request, code)
+        qrcodehelp.createQrcode(request, pipe.pipe_group, code)
     
 
     # 使用 FileResponse 返回图片，并设置 Content-Disposition 头为 attachment 强制下载
@@ -84,11 +86,12 @@ def downloadQrcode(request, code):
 def downloadAllQrcode(request):
     # 定义二维码图片存储目录
     qr_folder_path = os.path.join(settings.BASE_DIR, 'data', 'qrcoderes')
-
+    pipeGroup = request.GET.get('pipe_group')
+    code = request.GET.get('code')
     # 检查目录是否存在
     if not os.path.exists(qr_folder_path):
         raise Http404("QR code directory not found")
-
+    
     # 创建一个内存中的 BytesIO 对象，作为 ZIP 文件
     zip_buffer = io.BytesIO()
 
@@ -97,9 +100,10 @@ def downloadAllQrcode(request):
         # 遍历目录中的所有文件
         for root, dirs, files in os.walk(qr_folder_path):
             for file in files:
-                # 将文件添加到 zip 包中
-                file_path = os.path.join(root, file)
-                zip_file.write(file_path, arcname=file)  # arcname 确保只保留文件名，而不是完整路径
+                if (pipeGroup == None or pipeGroup in file) and (code == None or code in file) :
+                    # 将文件添加到 zip 包中
+                    file_path = os.path.join(root, file)
+                    zip_file.write(file_path, arcname=file)  # arcname 确保只保留文件名，而不是完整路径
 
     # 将缓冲区指针移到开始位置，以便可以读取数据
     zip_buffer.seek(0)
@@ -111,6 +115,32 @@ def downloadAllQrcode(request):
     return response
 
 
+def uploadfile(request):
+    if request.method == 'POST':
+        form = views.UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            FILE_PATH = f'{settings.MEDIA_ROOT}/uploads/piplinedatas.xlsx'
+
+            # 删除文件
+            if os.path.exists(FILE_PATH):
+                os.remove(FILE_PATH)
+
+            # 获取上传的文件
+            uploaded_file = request.FILES['file']
+            original_name = uploaded_file.name
+            uploaded_file.name = 'piplinedatas.xlsx';
+            # 将文件保存到数据库中
+            instance = views.UploadedFile(file=uploaded_file)
+            instance.save()
+            views.import_pipelines_data(request)
+            createAllQrcode(request)
+            return HttpResponse(f'文件 "{original_name}" 上传成功')
+    else:
+        form = views.UploadFileForm()
+    return render(request, 'pipemanager.html', {'form': form})    
+
+
 @method_decorator(login_required, name='dispatch')
 class PipelineListView(APIView):
     def get(self, request):
@@ -120,11 +150,14 @@ class PipelineListView(APIView):
         paginator.page_size = int(page_size)
 
         # 按 code 查询的部分
+        queryset = Pipelines.objects.all()
+
         code = request.GET.get('code')
+        group  = request.GET.get('pipe_group')
         if code:
-            queryset = Pipelines.objects.filter(code=code)
-        else:
-            queryset = Pipelines.objects.all()
+            queryset = queryset.filter(code=code)
+        if group:
+            queryset = queryset.filter(pipe_group=group)
 
         results = paginator.paginate_queryset(queryset, request)
 
