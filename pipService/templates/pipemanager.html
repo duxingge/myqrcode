@@ -6,72 +6,174 @@
     <title>Pipeline Manager</title>
     <style>
         body {
-            background-image: url('http://101.201.173.95:8000/static/shanxi_ranqi.png'); /* 替换为你的背景图路径 */
+            background-image:url('http://101.201.173.95:8000/static/back1.jpg');
+            background-size:cover;
+            height:100vh;
         }
         .tab { display: none; }
-        .tab-button { cursor: pointer; }
+        .tabSelectContainer {
+            height: 50px;
+            width: 100%;
+            display: flex;
+        }
+
+        .tab-button { 
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            
+            border: 1px solid #ccc;
+            text-align: center;
+            cursor: pointer; 
+        }
+
         .active { display: block; }
+        h1 {
+            text-align: center;
+        }
+        .content {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .bottom-bar {
+            width: 100%;
+            height: 50px;
+            background-color: #f8f8f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            bottom: 0;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .list {
+            padding: 0;
+            list-style-type: none;
+        }
+        .list-item {
+            margin-bottom: 8px; /* 垂直间距8dp */
+            padding-left: 5px;
+            padding-right:5px;
+        }
+        .file-name {
+            width: 400px; /* 固定宽度 */
+            overflow: hidden; /* 隐藏超出部分 */
+            text-overflow: ellipsis; /* 超出部分用省略号表示 */
+            white-space: nowrap; /* 不换行 */
+        }
+        .download-btn {
+            padding: 6px 12px; /* 按钮内边距 */
+            background-color: #007bff; /* 按钮背景颜色 */
+            color: white; /* 按钮文本颜色 */
+            border: none; /* 去掉边框 */
+            border-radius: 4px; /* 圆角 */
+            cursor: pointer; /* 鼠标悬停时变成手形 */
+        }
+        .download-btn:hover {
+            background-color: #0056b3; /* 悬停时更改背景颜色 */
+        }
+
+        .search-btn {
+            padding: 6px 12px; /* 按钮内边距 */
+            background-color: #007bff; /* 按钮背景颜色 */
+            color: white; /* 按钮文本颜色 */
+            border: none; /* 去掉边框 */
+            border-radius: 4px; /* 圆角 */
+            cursor: pointer; /* 鼠标悬停时变成手形 */
+        }
     </style>
 </head>
 <body>
-    <h1>Pipeline Manager</h1>
+    <h1 >管道信息管理</h1> 
     
     <!-- Tab Buttons -->
-    <div>
-        <button class="tab-button" onclick="showTab('list')">Pipeline List</button>
-        <button class="tab-button" onclick="showTab('upload')">Upload File</button>
+    <div class="tabSelectContainer">
+        <button class="tab-button" onclick="showTab('pipeLineTab')">管道列表</button>
+        <button class="tab-button" onclick="showTab('upload')">上传文件</button>
     </div>
 
+    <div class= "content">
     <!-- Tab Contents -->
-    <div id="list" class="tab active">
-        <h2>Pipeline List</h2>
+        <div id="pipeLineTab" class="tab active">
+            <h2>管道列表</h2>
         
-        <!-- 查询表单 -->
-        <form action="" method="get">
-            <label for="code">Enter Code:</label>
-            <input type="text" id="code" name="code" value="{{ searched_code }}">
-            <button type="submit">Search</button>
-        </form>
+            <!-- 查询表单 -->
+            <form action="" method="get" >
+                <label for="code">请输入管线名称:</label>
+                    <input list="pipeLineSuggestions" type="text" id="pipleLine" name="pipe_group" value="{{ pipe_group }}">
+                    <datalist id="pipeLineSuggestions">
+                        <option value="宝汉线">
+                        <option value="汉安线">
+                        <option value="康汉线">
+                        <option value="留凤线">
+                        <option value="留坝支线">
+                    </datalist>
+                    
 
-        <h2>Pipelines</h2>
-        <ul>
-            {% for pipeline in pipelines %}
-                <li>{{ pipeline.name }} - Code: {{ pipeline.code }}</li>
-            {% empty %}
-                <li>No pipelines found.</li>
-            {% endfor %}
-        </ul>
-
-        <!-- 分页 -->
-        <div>
-            <form action="" method="get">
-                <input type="hidden" name="code" value="{{ searched_code }}">
-                <label for="page">Page:</label>
-                <input type="number" id="page" name="page" value="{{ current_page }}" min="1" max="{{ total_pages }}">
-                <button type="submit">Go</button>
+                <label for="code">请输入管道编号:</label>
+                    <input type="text" id="code" name="code" value="{{ searched_code }}">
+                
+                <button class="search-btn" type="submit">搜索</button>
+                
             </form>
 
-            {% if previous_page_url %}
-                <a href="{{ previous_page_url }}">Previous</a>
-            {% endif %}
-            <span>Page {{ current_page }} of {{ total_pages }}</span>
-            {% if next_page_url %}
-                <a href="{{ next_page_url }}">Next</a>
-            {% endif %}
+            <h2>管道信息 <button class = "download-btn" onclick="downloadFiles()">下载所有查询结果</button> </h2>  
+        
+            <ul class="list">
+                {% for pipeline in pipelines %}
+                    <li class="list-item" id = "list" >
+                        <span class="file-name">
+                            {{ pipeline.name }} - 管号: {{ pipeline.code }}
+                        </span>  
+                        <button class = "download-btn" onclick="downloadFile({{pipDetails.code}})">
+                            下载
+                        </button> 
+                    </li>
+                {% empty %}
+                    <li>未找到管道信息.</li>
+                {% endfor %}
+            </ul>
+       
+            <div height="50px"></div> 
+            <!-- 分页 -->
+            <div class="bottom-bar">
+
+                {% if previous_page_url %}
+                    <a href="{{ previous_page_url }}">Previous</a>
+                {% endif %}
+                <span>第 {{ current_page }} 页，总共 {{ total_pages }}页</span>
+                {% if next_page_url %}
+                    <a href="{{ next_page_url }}">Next</a>
+                {% endif %}
+                <div width="10px"></div>
+                <form action="" method="get">
+                    <input type="hidden" name="code" value="{{ searched_code }}">
+                    <label for="page">页号:</label>
+                    <input type="number" id="page" name="page" value="{{ current_page }}" min="1" max="{{ total_pages }}">
+                    <button type="submit">前往</button>
+                </form>
+            </div>
         </div>
+
+        <div id="upload" class="tab">
+            <h2>Upload File</h2>
+            {% if message %}
+                <p>{{ message }}</p>
+            {% endif %}
+            <form action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="file" required>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+
+       
     </div>
 
-    <div id="upload" class="tab">
-        <h2>Upload File</h2>
-        {% if message %}
-            <p>{{ message }}</p>
-        {% endif %}
-        <form action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="file" required>
-            <button type="submit">Upload</button>
-        </form>
-    </div>
+    
 
     <script>
         function showTab(tabName) {
@@ -84,6 +186,39 @@
             // Show the selected tab
             document.getElementById(tabName).classList.add('active');
         }
+
+        function getQueryParams() {
+            const urlParams = new URLSearchParams(window.location.search); // 获取URL的查询参数
+            const params = {};
+            console.log(urlParams)
+            // 遍历所有的参数
+            for (const [key, value] of urlParams.entries()) {
+                params[key] = value; // 将参数键值对存入对象
+            }
+
+            return params;
+        }
+
+
+        function downloadFile(code) {
+           
+        }
+
+        function downloadFiles() {
+            
+            const params = getQueryParams(); // 获取参数
+            const paramsDiv = document.getElementById('params');
+            console.log(params)
+            // 显示参数
+            for (const key in params) {
+                console.log('aaaaa');
+                console.log(`${key}=${params[key]}`)
+            }
+
+        }
+
+        
+
     </script>
 </body>
 </html>
