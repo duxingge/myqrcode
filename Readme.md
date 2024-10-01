@@ -35,8 +35,6 @@ python3 manage.py migrate TestModel   # 创建指定表结构
 
 
 
-
-
 <!-- 数据库相关 -->
 
 cd /Users/wangjiaxing/work/myqrcode/pipService/db
@@ -89,7 +87,7 @@ http://localhost:8001/pipline/import/data/
 
 
 <!-- ------------------API  接口------------------------- -->
-http://101.201.173.95:8000
+http://101.201.173.95:8000/pipline/infos/download/all/?code=0096+1&pipe_group=汉安线
 
 单个/组下载：
    /pipline/infos/download/all/?code=0096+1&pipe_group=汉安线
@@ -103,3 +101,8 @@ http://101.201.173.95:8000
 
 <!-- 文件上传 -->
 pipline/upload/
+
+
+
+<!-- 视频名称 -->
+large_scale_construction.mp4  pipline_protect.mp4  security_allance.mp4

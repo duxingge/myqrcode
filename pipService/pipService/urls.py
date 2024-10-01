@@ -44,6 +44,8 @@ urlpatterns = ([
     path('pipline/infos/download/code/<str:code>/', pipdetails.downloadQrcode),
     path('pipline/infos/download/all/', pipdetails.downloadAllQrcode),
     path('pipline/upload/', pipdetails.uploadfile, name='upload_file'),
+    path('pipline/properties/', pipdetails.getPipProperties, name='getPipProperties'),
+    path('pipline/properties/update/', pipdetails.setproerties, name='setproerties'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )

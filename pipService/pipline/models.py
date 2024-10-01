@@ -28,6 +28,14 @@ class Pipelines(models.Model):
     pipe_group  = models.CharField(max_length=255, verbose_name='汉安线')
 
 
+
+class PipelinesConifg(models.Model):
+    # id 字段会自动创建并作为主键 (Primary Key)
+    name = models.CharField(max_length=255, verbose_name='属性名')
+    value = models.CharField(max_length=255, unique=True, verbose_name='值')  #
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
 class UploadedFile(models.Model):
     
     file = models.FileField(upload_to='uploads/')  # 文件将上传到 'uploads/' 目录

@@ -23,7 +23,9 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
+from pipline.models import PipelinesConifg
 
+from pipService.qrutil import properties
 
 @login_required
 def getPipdetails(request):
@@ -139,6 +141,29 @@ def uploadfile(request):
     else:
         form = views.UploadFileForm()
     return render(request, 'pipemanager.html', {'form': form})    
+
+
+def getPipProperties():
+    propertiesRes = PipelinesConifg.objects.all()
+    # 如果 pipeline_data 是 QuerySet 或 Django 模型实例，需将其转换为可序列化的格式
+    if isinstance(propertiesRes, models.Model):  # 如果是单个模型实例
+        # 将对象转换为字典
+        propertiesRes = model_to_dict(propertiesRes)
+    elif hasattr(propertiesRes, '__iter__'):  # 检查是否为可迭代对象（如 QuerySet）
+        propertiesRes = list(propertiesRes.values())  # 转换为字典列表
+
+    # 将数据转换为 JSON 字符串
+    res = json.dumps(propertiesRes, ensure_ascii=False)
+
+    # 返回 HttpResponse 并指定 Content-Type 为 application/json
+    return HttpResponse(res, content_type='application/json')
+
+
+def setproerties(request):
+    name = request.GET.get('name')
+    value = request.GET.get('value')
+    properties.set_property(name, value)
+    return HttpResponse("<p>修改成功</p>")
 
 
 @method_decorator(login_required, name='dispatch')
