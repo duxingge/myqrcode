@@ -27,6 +27,7 @@ from .views.pipdetails import PipelineListView
 
 
 urlpatterns = ([
+    # 文件导入数据库
     path('pipline/import/data/', views.import_pipelines_data),
     path('accounts/login/', loginHome.login_view, name='login'),
     path('pipline/logout/', loginHome.logout_view, name='logout'),
