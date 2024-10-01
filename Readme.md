@@ -85,7 +85,12 @@ http://localhost:8001/pipline/create/all/qrcodes/
 <!-- 导入数据 -->
 http://localhost:8001/pipline/import/data/
 
+
+
+
+<!-- ------------------API  接口------------------------- -->
 http://101.201.173.95:8000
+
 单个/组下载：
    /pipline/infos/download/all/?code=0096+1&pipe_group=汉安线
 全部下载：
