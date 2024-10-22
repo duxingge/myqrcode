@@ -6,7 +6,7 @@
     <title>Pipeline Manager</title>
     <style>
         body {
-            background-image:url('http://101.201.173.95:8000/static/back1.jpg');
+            background-image:url('http://www.shanxiranqi.ltd/static/back1.jpg');
             background-size:cover;
             height:100vh;
         }
@@ -22,9 +22,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            
-            border: 1px solid #ccc;
+            font-size: 24px;
+            background-color:transparent;
             text-align: center;
             cursor: pointer; 
         }
@@ -101,9 +100,9 @@
             <h2>管道列表</h2>
         
             <!-- 查询表单 -->
-            <form action="" method="get" >
+            <form onsubmit="doSearch(event)" >
                 <label for="code">请输入管线名称:</label>
-                    <input list="pipeLineSuggestions" type="text" id="pipleLine" name="pipe_group" value="{{ pipe_group }}">
+                    <input list="pipeLineSuggestions" type="text" id="pipeLine" name="pipe_group" value="{{ pipe_group }}">
                     <datalist id="pipeLineSuggestions">
                         <option value="宝汉线">
                         <option value="汉安线">
@@ -111,7 +110,7 @@
                         <option value="留凤线">
                         <option value="留坝支线">
                     </datalist>
-                    
+                    <div id="pipLineError" class="error"></div> <!-- 提示信息 -->
 
                 <label for="code">请输入管道编号:</label>
                     <input type="text" id="code" name="code" value="{{ searched_code }}">
@@ -128,7 +127,8 @@
                         <span class="file-name">
                             {{ pipeline.name }} - 管号: {{ pipeline.code }}
                         </span>  
-                        <button class = "download-btn" onclick="downloadFile({{pipDetails.code}})">
+                        
+                        <button class = "download-btn" onclick="downloadFile('{{ pipeline.code }}')">
                             下载
                         </button> 
                     </li>
@@ -159,14 +159,14 @@
         </div>
 
         <div id="upload" class="tab">
-            <h2>Upload File</h2>
+            <h2>上传管道信息</h2>
             {% if message %}
                 <p>{{ message }}</p>
             {% endif %}
             <form action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="file" name="file" required>
-                <button type="submit">Upload</button>
+                <button class="download-btn" type="submit">上传</button>
             </form>
         </div>
 
@@ -176,6 +176,8 @@
     
 
     <script>
+
+
         function showTab(tabName) {
             // Hide all tabs
             var tabs = document.querySelectorAll('.tab');
@@ -190,7 +192,6 @@
         function getQueryParams() {
             const urlParams = new URLSearchParams(window.location.search); // 获取URL的查询参数
             const params = {};
-            console.log(urlParams)
             // 遍历所有的参数
             for (const [key, value] of urlParams.entries()) {
                 params[key] = value; // 将参数键值对存入对象
@@ -201,23 +202,91 @@
 
 
         function downloadFile(code) {
-           
+            const params = getQueryParams(); // 获取参数
+
+            const singleFileDownloadUrl = "http://www.shanxiranqi.ltd/pipline/infos/download/code/" + code
+
+            const a = document.createElement('a');
+            a.href = singleFileDownloadUrl;
+            a.download = ''; // 设置为下载模式，文件名可以留空
+            document.body.appendChild(a); // 将元素添加到文档
+            a.click(); // 触发点击事件
+            document.body.removeChild(a); // 点击后移除元素
         }
 
         function downloadFiles() {
+            const urlParamsString = window.location.search
+            console.log(`${urlParamsString}`)
             
-            const params = getQueryParams(); // 获取参数
-            const paramsDiv = document.getElementById('params');
-            console.log(params)
-            // 显示参数
-            for (const key in params) {
-                console.log('aaaaa');
-                console.log(`${key}=${params[key]}`)
-            }
+            
+
+            const downloadUrl = "http://www.shanxiranqi.ltd/pipline/infos/download/all/" + urlParamsString
+            console.log(`${downloadUrl}`)
+
+             // 创建一个临时的<a>元素
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = ''; // 设置为下载模式，文件名可以留空
+            document.body.appendChild(a); // 将元素添加到文档
+            a.click(); // 触发点击事件
+            document.body.removeChild(a); // 点击后移除元素
 
         }
 
+        function doSearch(event) {
+           
+           
+            const codeField = document.getElementById('code');
+            const code = codeField.value.trim(); // 获取输入框的值并去除空
+
+            const pipleLineField = document.getElementById('pipeLine');
+            const pipleLineName = pipleLineField.value.trim(); // 获取输入框的值并去除空
         
+            if(code === '') {
+                //ignore
+                return
+            } 
+            const errorMessage = document.getElementById('pipLineError'); 
+
+            if (pipleLineName === '') {
+                event.preventDefault(); // 阻止表单提交
+                pipleLineField.focus(); // 将焦点移到输入框
+                errorMessage.innerText = '输入不能为空！'; // 显示错误提示
+            } else {
+                // 输入框不为空，继续执行
+                errorMessage.innerText = ''; // 清空提示
+              
+            } 
+
+        }
+
+        function updateData() {
+            const params = getQueryParams(); // 获取参数
+            const codeField = document.getElementById('code');
+            const pipleLineField = document.getElementById('pipeLine');
+
+            console.log(`params:${params}`)
+            // 检查是否存在名为 'inputValue' 的参数
+            const code = params['code'];
+            const pipleLineDesc = params['pipe_group'];
+
+            console.log(`code:${code}, pipeLine:${pipleLineDesc}`)
+            if(code) {
+                codeField.value = code;
+            } else {
+                codeField.value = '';
+            }
+     
+    
+            if(pipleLineDesc) {
+                pipleLineField.value = pipleLineDesc;
+            } else {
+                pipleLineField.value = '';
+            }
+        
+        }
+
+        window.onload = updateData()
 
     </script>
 </body>
