@@ -149,7 +149,7 @@ def uploadMediafile(request):
         uploaded_file = request.FILES['mediaFile']
 
 
-        FILE_PATH = f'{settings.MEDIA_ROOT}/pipelinemedia.mp4'
+        FILE_PATH = f'{settings.MEDIA_ROOT}/upload/pipelinemedia.mp4'
 
         # 删除文件
         if os.path.exists(FILE_PATH):
