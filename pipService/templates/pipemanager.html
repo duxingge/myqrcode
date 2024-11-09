@@ -165,7 +165,13 @@
             {% endif %}
             <form action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <input type="file" name="file" required>
+                <input type="file" name="file" >
+                <button class="download-btn" type="submit">上传</button>
+            </form>
+
+            <form action="{% url 'upload_media_file' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="mediaFile" >
                 <button class="download-btn" type="submit">上传</button>
             </form>
         </div>

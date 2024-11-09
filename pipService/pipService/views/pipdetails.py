@@ -143,6 +143,27 @@ def uploadfile(request):
     return render(request, 'pipemanager.html', {'form': form})    
 
 
+def uploadMediafile(request):
+    if request.method == 'POST':
+        # 获取上传的文件
+        uploaded_file = request.FILES['mediaFile']
+
+
+        FILE_PATH = f'{settings.MEDIA_ROOT}/uploads/pipelinemedia.mp4'
+
+        # 删除文件
+        if os.path.exists(FILE_PATH):
+            os.remove(FILE_PATH)
+
+        original_name = uploaded_file.name
+        uploaded_file.name = 'pipelinemedia.mp4';
+        # 将文件保存到数据库中
+        instance = views.UploadedFile(file=uploaded_file)
+        instance.save()
+        return HttpResponse(f'视频 "{original_name}" 更新成功')
+
+
+
 def getPipProperties():
     propertiesRes = PipelinesConifg.objects.all()
     # 如果 pipeline_data 是 QuerySet 或 Django 模型实例，需将其转换为可序列化的格式

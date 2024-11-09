@@ -30,7 +30,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '192.168.31.108',
     '192.168.31.93',
-    '101.201.173.95'
+    '101.201.173.95',
+    'www.shanxiranqi.ltd',
 ]
 
 
@@ -84,9 +85,12 @@ WSGI_APPLICATION = 'pipService.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db/pipline.sqlite3',
+        'NAME': '/data/database/sqlite/pipline.sqlite3',
+        # 'NAME': '/Users/wangjiaxing/qrcodedata/db/pipline.sqlite3',
     }
 }
+
+
 
 
 # Password validation
@@ -142,8 +146,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 QRCODE_PIC_PREFIX = "QRCODE_PIC_"
 
 
-QRCODE_DATA= "/Users/wangjiaxing/work/myqrcode/pipService/data/"
-# QRCODE_DATA= "/data/qrcodedata"
+# QRCODE_DATA= "/Users/wangjiaxing/work/myqrcode/pipService/data/"
+QRCODE_DATA= "/data/qrcodedata"
 
 QRCODE_PIC_RESULT_PATH = f"{QRCODE_DATA}/qrcoderes"
 
