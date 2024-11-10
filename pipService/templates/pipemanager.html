@@ -163,16 +163,25 @@
             {% if message %}
                 <p>{{ message }}</p>
             {% endif %}
-            <form action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="file" name="file" >
-                <button class="download-btn" type="submit">上传</button>
+            <h3>选择管道表格文件:</h3>
+            <form id = "uploadForm" action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
+                <div class="file-upload-form">
+                    {% csrf_token %}
+                    <input type="file" name="file" id="fileUploadForm">
+                    <button class="download-btn" type="submit">上传</button>
+                </div>
+                
             </form>
 
-            <form action="{% url 'upload_media_file' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="file" name="mediaFile" >
-                <button class="download-btn" type="submit">上传</button>
+            <h3>选择管道宣传视频文件:</h3>
+            <form id="uploadMedia" action="{% url 'upload_media_file' %}" method="post" enctype="multipart/form-data">
+                <div class="file-upload-media">
+                    {% csrf_token %}
+                  
+                      <input type="file" name="mediaFile" id="fileUploadMedia">
+                      <button class="download-btn" type="submit">上传</button>
+                </div>
+                
             </form>
         </div>
 
@@ -294,6 +303,67 @@
 
         window.onload = updateData()
 
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 阻止默认表单提交行为
+
+            const fileInput = document.getElementById('fileUploadForm');
+            if (fileInput.files.length === 0) {
+                alert('请选择文件');
+            } else {
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                fetch(event.target.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('result').textContent = '上传成功: ' + data.filename;
+                    } else {
+                        document.getElementById('result').textContent = '上传失败: ' + data.error;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('result').textContent = '上传失败';
+                });
+            }
+        });
+
+        document.getElementById('uploadMedia').addEventListener('submit', function(event) {
+            event.preventDefault(); // 阻止默认表单提交行为
+
+            const fileInput = document.getElementById('fileUploadMedia');
+            if (fileInput.files.length === 0) {
+                alert('请选择文件');
+            } else {
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                fetch(event.target.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('result').textContent = '上传成功: ' + data.filename;
+                    } else {
+                        document.getElementById('result').textContent = '上传失败: ' + data.error;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('result').textContent = '上传失败';
+                });
+            }
+        });
     </script>
 </body>
 </html>
