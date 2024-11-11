@@ -169,17 +169,17 @@
                     {% csrf_token %}
                     <input type="file" name="file" id="fileUploadForm">
                     <button class="download-btn" type="submit">上传</button>
+                    <div id="uploadFormResult"></div>
                 </div>
-                
             </form>
 
             <h3>选择管道宣传视频文件:</h3>
             <form id="uploadMedia" action="{% url 'upload_media_file' %}" method="post" enctype="multipart/form-data">
                 <div class="file-upload-media">
                     {% csrf_token %}
-                  
                       <input type="file" name="mediaFile" id="fileUploadMedia">
                       <button class="download-btn" type="submit">上传</button>
+                      <div id="uploadMediaResult"></div>
                 </div>
                 
             </form>
@@ -322,17 +322,19 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    alert({{data.success}})
                     if (data.success) {
-                        document.getElementById('result').textContent = '上传成功: ' + data.filename;
+                        document.getElementById('uploadFormResult').textContent = '上传成功: ' + data.filename;
                     } else {
-                        document.getElementById('result').textContent = '上传失败: ' + data.error;
+                        document.getElementById('uploadFormResult').textContent = '上传失败: ' + data.error;
                     }
                 })
                 .catch(error => {
-                    document.getElementById('result').textContent = '上传失败';
+                    alert({{error}})
+                    document.getElementById('uploadFormResult').textContent = '上传失败11';
                 });
             }
-        });
+        }); 
 
         document.getElementById('uploadMedia').addEventListener('submit', function(event) {
             event.preventDefault(); // 阻止默认表单提交行为
@@ -342,7 +344,7 @@
                 alert('请选择文件');
             } else {
                 const formData = new FormData();
-                formData.append('file', fileInput.files[0]);
+                formData.append('mediaFile', fileInput.files[0]);
 
                 fetch(event.target.action, {
                     method: 'POST',
@@ -354,13 +356,13 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        document.getElementById('result').textContent = '上传成功: ' + data.filename;
+                        document.getElementById('uploadMediaResult').textContent = '上传成功: ' + data.filename;
                     } else {
-                        document.getElementById('result').textContent = '上传失败: ' + data.error;
+                        document.getElementById('uploadMediaResult').textContent = '上传失败: ' + data.error;
                     }
                 })
                 .catch(error => {
-                    document.getElementById('result').textContent = '上传失败';
+                    document.getElementById('uploadMediaResult').textContent = '上传失败';
                 });
             }
         });

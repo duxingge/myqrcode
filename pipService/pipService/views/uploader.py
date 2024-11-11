@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
 from .forms import UploadFileForm
 from .models import UploadedFile
 from django.contrib.auth.decorators import login_required
@@ -17,7 +18,8 @@ def upload_file(request):
             instance = UploadedFile(file=uploaded_file)
             instance.save()
 
-            return HttpResponse(f'文件 "{uploaded_file.name}" 上传成功')
+            return JsonResponse({'success': True, 'filename': {uploaded_file.name}})
+        return JsonResponse({'success': False, 'error':'上传失败12'})
     else:
-        form = UploadFileForm()
-    return render(request, 'pipemanager.html', {'form': form})
+        return JsonResponse({'success': False, 'error':'无效的请求方法'})
+    

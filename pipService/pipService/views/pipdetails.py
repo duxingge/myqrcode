@@ -7,7 +7,7 @@ import os
 import io
 from django.http import HttpResponse, Http404
 from django.conf import settings
-from django.http import FileResponse
+from django.http import FileResponse, JsonResponse
 import json
 from django.core import serializers
 from django.shortcuts import get_object_or_404
@@ -160,7 +160,8 @@ def uploadMediafile(request):
         # 将文件保存到数据库中
         instance = views.UploadedFile(file=uploaded_file)
         instance.save()
-        return HttpResponse(f'视频 "{original_name}" 更新成功')
+        return JsonResponse({'success': True, 'filename': f'视频 "{original_name}" 更新成功'})
+    return JsonResponse({'success': False, 'filename': f'视频 "{original_name}" 更新失败'})
 
 
 
