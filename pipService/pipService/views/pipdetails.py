@@ -137,10 +137,11 @@ def uploadfile(request):
             instance.save()
             views.import_pipelines_data(request)
             createAllQrcode(request)
-            return HttpResponse(f'文件 "{original_name}" 上传成功')
+            return JsonResponse({'success': True, 'filename': f'文件 "{original_name}" 上传成功'})
+        else:
+            return JsonResponse({'success': False, 'filename': f'文件 "{original_name}" 上传失败'})
     else:
-        form = views.UploadFileForm()
-    return render(request, 'pipemanager.html', {'form': form})    
+        return JsonResponse({'success': False, 'error':'上传失败'}) 
 
 
 def uploadMediafile(request):

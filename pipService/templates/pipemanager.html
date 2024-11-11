@@ -329,11 +329,11 @@
                     }
                 })
                 .catch(error => {
-                    alert({{error}})
+                    console.error('上传过程中出现错误:', error);
                     document.getElementById('uploadFormResult').textContent = '上传失败11';
                 });
             }
-        }); 
+        });
 
         document.getElementById('uploadMedia').addEventListener('submit', function(event) {
             event.preventDefault(); // 阻止默认表单提交行为
