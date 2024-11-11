@@ -156,7 +156,7 @@ def uploadMediafile(request):
             os.remove(FILE_PATH)
 
         original_name = uploaded_file.name
-        uploaded_file.name = 'pipelinemedia.mp4';
+        uploaded_file.name = 'pipelinemedia.mp4'
         # 将文件保存到数据库中
         instance = views.UploadedFile(file=uploaded_file)
         instance.save()

@@ -322,7 +322,6 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    alert({{data.success}})
                     if (data.success) {
                         document.getElementById('uploadFormResult').textContent = '上传成功: ' + data.filename;
                     } else {

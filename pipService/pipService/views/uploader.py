@@ -19,7 +19,7 @@ def upload_file(request):
             instance.save()
 
             return JsonResponse({'success': True, 'filename': {uploaded_file.name}})
-        return JsonResponse({'success': False, 'error':'上传失败12'})
+        return JsonResponse({'success': False, 'error':'上传失败'})
     else:
         return JsonResponse({'success': False, 'error':'无效的请求方法'})
     
