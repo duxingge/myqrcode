@@ -69,17 +69,17 @@ def createAllQrcode(request):
 @login_required
 def downloadQrcode(request, code):
     # 构造二维码图片的文件路径
-    qr_file_path = os.path.join(settings.BASE_DIR, 'data', 'qrcoderes', f'QRCODE_PIC_{code}.jpg')
+    pipe = views.get_pipeline_data_by_code(request, code)
+    group = pipe.pipe_group
+    qr_file_path = os.path.join(settings.QRCODE_PIC_RESULT_PATH, f'QRCODE_PIC_{group}{code}.jpg')
 
     # 检查文件是否存在
     if not os.path.exists(qr_file_path):
-        pipe = views.get_pipeline_data_by_code(request, code)
         qrcodehelp.createQrcode(request, pipe.pipe_group, code)
-    
 
     # 使用 FileResponse 返回图片，并设置 Content-Disposition 头为 attachment 强制下载
     response = FileResponse(open(qr_file_path, 'rb'), content_type='image/jpeg')
-    response['Content-Disposition'] = f'attachment; filename="QRCODE_PIC_{code}.jpg"'
+    response['Content-Disposition'] = f'attachment; filename="QRCODE_PIC_{group}{code}.jpg"'
     return response   
 
 
@@ -87,7 +87,7 @@ def downloadQrcode(request, code):
 @login_required
 def downloadAllQrcode(request):
     # 定义二维码图片存储目录
-    qr_folder_path = os.path.join(settings.BASE_DIR, 'data', 'qrcoderes')
+    qr_folder_path = os.path.join(settings.QRCODE_PIC_RESULT_PATH)
     pipeGroup = request.GET.get('pipe_group')
     code = request.GET.get('code')
     # 检查目录是否存在
