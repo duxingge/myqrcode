@@ -71,7 +71,8 @@ def downloadQrcode(request, code):
     # 构造二维码图片的文件路径
     pipe = views.get_pipeline_data_by_code(request, code)
     group = pipe.pipe_group
-    qr_file_path = os.path.join(settings.QRCODE_PIC_RESULT_PATH, f'QRCODE_PIC_{group}{code}.jpg')
+    fileName = f'QRCODE_PIC_{group}{code}.jpg'
+    qr_file_path = os.path.join(settings.QRCODE_PIC_RESULT_PATH, f'{fileName}')
 
     # 检查文件是否存在
     if not os.path.exists(qr_file_path):
@@ -79,7 +80,7 @@ def downloadQrcode(request, code):
 
     # 使用 FileResponse 返回图片，并设置 Content-Disposition 头为 attachment 强制下载
     response = FileResponse(open(qr_file_path, 'rb'), content_type='image/jpeg')
-    response['Content-Disposition'] = f'attachment; filename="QRCODE_PIC_{group}{code}.jpg"'
+    response['Content-Disposition'] = f'attachment; filename="QRCODE_PIC_{code}.jpg"'
     return response   
 
 

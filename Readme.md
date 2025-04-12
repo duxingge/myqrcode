@@ -45,6 +45,8 @@ sqlite3
 <!-- 打开数据库 -->
 .open pipService.db
 
+<!-- 查看所有数据库 -->
+.databases
 <!-- 查看表 -->
 .tables
 
