@@ -24,6 +24,7 @@ from pipline import views
 from django.conf.urls.static import static
 from django.conf import settings
 from .views.pipdetails import PipelineListView
+from pipline.views import inspection_create, InspectionListView
 
 
 urlpatterns = ([
@@ -47,6 +48,9 @@ urlpatterns = ([
     path('pipline/upload/', pipdetails.uploadfile, name='upload_file'),
     path('pipline/properties/', pipdetails.getPipProperties, name='getPipProperties'),
     path('pipline/properties/update/', pipdetails.setproerties, name='setproerties'),
+    path('pipline/inspection/create/', inspection_create, name='inspection_create'),
+    path('pipline/inspection/list/', InspectionListView.as_view(), name='inspection_list'),
+    path('pipline/register/', views.register_view, name='register'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )

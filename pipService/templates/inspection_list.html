@@ -1,0 +1,95 @@
+{% comment %} {% extends 'base.html' %}
+
+{% block content %} {% endcomment %}
+<h2>巡检记录报表</h2>
+<form method="get">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="name">姓名：</label>
+            <input type="text" name="name" id="name" class="form-control" 
+                   value="{{ request.GET.name }}">
+        </div>
+        <div class="col-md-3">
+            <label for="stake_number">桩号：</label>
+            <input type="text" name="stake_number" id="stake_number" class="form-control" 
+                   value="{{ request.GET.stake_number }}">
+        </div>
+        <div class="col-md-3">
+            <label for="start_time">开始时间：</label>
+            <input type="date" name="start_time" id="start_time" class="form-control" 
+                   value="{{ request.GET.start_time }}">
+        </div>
+        <div class="col-md-3">
+            <label for="end_time">结束时间：</label>
+            <input type="date" name="end_time" id="end_time" class="form-control" 
+                   value="{{ request.GET.end_time }}">
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary">查询</button>
+            <a href="{% url 'inspection_list' %}" class="btn btn-secondary">重置</a>
+        </div>
+    </div>
+</form>
+<!-- 记录表格 -->
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>姓名</th>
+            <th>巡检记录</th>
+            <th>异常记录</th>
+            <th>现场照片</th>
+            <th>巡检时间</th>
+            <th>位置信息</th>
+            <th>桩号</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.inspector.username }}</td>
+            <td>{{ record.get_inspection_result_display }}</td>
+            <td>{{ record.abnormal_record|default:"无" }}</td>
+            <td>
+                {% if record.photo %}
+                <img src="{{ record.photo.url }}" width="100" class="img-thumbnail">
+                {% else %}
+                无照片
+                {% endif %}
+            </td>
+            <td>{{ record.inspection_time|date:"Y-m-d H:i" }}</td>
+            <td>{{ record.location_info }}</td>
+            <td>{{ record.stake_number }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center">没有找到匹配的记录</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- 分页 -->
+{% comment %} {% if is_paginated %} {% endcomment %}
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">上一页</a>
+        </li>
+        {% endif %}
+        
+        <li class="page-item disabled">
+            <span class="page-link">
+                共 {{ page_obj.paginator.num_pages }} 页 第 {{ page_obj.number }} 页
+            </span>
+        </li>
+        
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">下一页</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>

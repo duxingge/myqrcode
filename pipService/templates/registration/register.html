@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="text-center">用户注册</h2>
+      <form method="post">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+        
+        <div class="form-group">
+          <label for="{{ form.username.id_for_label }}">用户名</label>
+          {{ form.username }}
+          {% if form.username.errors %}
+            <div class="invalid-feedback d-block">
+              {{ form.username.errors }}
+            </div>
+          {% endif %}
+          <small class="form-text text-muted">必填，150个字符或更少，只能包含字母、数字和 @/./+/-/_。</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.password1.id_for_label }}">密码</label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}
+            <div class="invalid-feedback d-block">
+              {{ form.password1.errors }}
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="form-group">
+          <label for="{{ form.password2.id_for_label }}">密码确认</label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}
+            <div class="invalid-feedback d-block">
+              {{ form.password2.errors }}
+            </div>
+          {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block">注册</button>
+      </form>
+      
+      <div class="text-center mt-3">
+        <p>已有账号？<a href="{% url 'login' %}">立即登录</a></p>
+      </div>
+    </div>
+  </div>
+</div>

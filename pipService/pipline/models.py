@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 from django.conf import settings
+from django.contrib.auth.models import User
 
 import os
 
@@ -41,3 +42,28 @@ class UploadedFile(models.Model):
     file = models.FileField(upload_to='uploads/')  # 文件将上传到 'uploads/' 目录
      
     uploaded_at = models.DateTimeField(auto_now_add=True)  # 上传时间
+
+class InspectionRecord(models.Model):
+    INSPECTION_RESULT_CHOICES = [
+        ('normal', '正常'),
+        ('abnormal', '异常'),
+    ]
+    
+    inspector = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="巡检人")
+    stake_number = models.CharField(max_length=100, verbose_name="桩号")
+    inspection_result = models.CharField(
+        max_length=10, 
+        choices=INSPECTION_RESULT_CHOICES, 
+        verbose_name="巡检结果"
+    )
+    abnormal_record = models.TextField(blank=True, null=True, verbose_name="异常记录")
+    inspection_time = models.DateTimeField(auto_now_add=True, verbose_name="巡检时间")
+    location_info = models.CharField(max_length=255, verbose_name="位置信息")
+    photo = models.ImageField(upload_to='inspection_photos/', blank=True, null=True, verbose_name="现场照片")
+    
+    def __str__(self):
+        return f"{self.inspector.username} - {self.stake_number} - {self.inspection_result}"
+    
+    class Meta:
+        verbose_name = "巡检记录"
+        verbose_name_plural = "巡检记录"
