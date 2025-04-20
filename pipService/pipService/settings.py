@@ -86,7 +86,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': '/data/database/sqlite/pipline.sqlite3',
-        'NAME': '/Users/wangjiawang/work2/myqrcodedb/pipline.sqlite3',
+        'NAME': '/Users/wangjiaxing/work/myqrcodedb/pipline.sqlite3',
     }
 }
 
@@ -95,9 +95,9 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    # },
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
     # {
     #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     # },

@@ -1,239 +1,95 @@
 {% comment %} {% extends 'base.html' %}
 
 {% block content %} {% endcomment %}
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <title>带分页的表格</title>
-  <style>
-    table {
-      border-collapse: collapse;
-      width: 80%;
-      margin-top: 20px;
-      margin: 0 auto;
-    }
-
-    th, td {
-      border: 1px solid #999;
-      padding: 10px;
-      text-align: center;
-    }
-
-    th {
-      background-color: #87CEEB;
-    }
-
-    .pagination {
-      
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        padding: 20px 0;
-        background-color: #f8f8f8;
-        border-top: 1px solid #ddd;
-        text-align:center;
-    }
-
-    .pagination button {
-        margin: 0 10px;
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-
-    .pagination button:hover {
-        background-color: #0056b3;
-      }
-
-
-    body {
-        font-family: sans-serif;
-        padding: 30px;
-        padding-bottom: 80px; /* 防止内容被按钮遮住 */
-        min-height: 100vh;
-        margin:0;
-      }
-  
-      form {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        flex-wrap: wrap; /* 保证在小屏幕时换行 */
-        justify-content:center;
-      }
-  
-      select,
-      input[type="datetime-local"],
-      button {
-        padding: 6px 10px;
-        font-size: 14px;
-      }
-  
-      button {
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-  
-      button:hover {
-        background-color: #0056b3;
-      }
-  
-      label {
-        font-weight: bold;
-        margin-right: 4px;
-      }
-  
-      .form-item {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
-
-      .patrolReport {
-        margin-top:100px;
-        margin-bottom:100px;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-      }
-
-  </style>
-</head>
-<body>
-
-    <form id="searchForm" onsubmit="handleSearch(event)">
-        <label for="name">姓名：</label>
-        <select id="name" name="name">
-          <option value="">-- 请选择姓名 --</option>
-          <option value="张三">张三</option>
-          <option value="李四">李四</option>
-          <option value="王五">王五</option>
-        </select>
-    
-        <label for="pile">桩号：</label>
-        <select id="pile" name="pile">
-          <option value="">-- 请选择桩号 --</option>
-          <option value="A001">A001</option>
-          <option value="B002">B002</option>
-          <option value="C003">C003</option>
-        </select>
-    
-        <label for="start">开始时间：</label>
-        <input type="datetime-local" id="start" name="start">
-    
-        <label for="end">结束时间：</label>
-        <input type="datetime-local" id="end" name="end">
-    
-        <button type="submit">查询</button>
-      </form>
-
-      <div class="patrolReport" > 
-        <label for="text" style="font-size: 32px"> 巡检记录报表</label>
-      </div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>姓名</th>
-        <th>桩号</th>
-        <th>巡检记录</th>
-        <th>异常记录</th>
-        <th>现场照片</th>
-        <th>巡检时间</th>
-        <th>位置信息</th>
-        
-      </tr>
-    </thead>
-    <tbody id="table-body">
-      <!-- JS 渲染内容行 -->
-    </tbody>
-  </table>
-
-  <div class="pagination" >
-    <button onclick="prevPage()">上一页</button>
-    <div style="padding-top:10px">
-        <span id="page-info" >第 1 页</span>
+<h2>巡检记录报表</h2>
+<form method="get">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="name">姓名：</label>
+            <input type="text" name="name" id="name" class="form-control" 
+                   value="{{ request.GET.name }}">
+        </div>
+        <div class="col-md-3">
+            <label for="stake_number">桩号：</label>
+            <input type="text" name="stake_number" id="stake_number" class="form-control" 
+                   value="{{ request.GET.stake_number }}">
+        </div>
+        <div class="col-md-3">
+            <label for="start_time">开始时间：</label>
+            <input type="date" name="start_time" id="start_time" class="form-control" 
+                   value="{{ request.GET.start_time }}">
+        </div>
+        <div class="col-md-3">
+            <label for="end_time">结束时间：</label>
+            <input type="date" name="end_time" id="end_time" class="form-control" 
+                   value="{{ request.GET.end_time }}">
+        </div>
     </div>
-    
-    <button onclick="nextPage()">下一页</button>
-  </div>
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary">查询</button>
+            <a href="{% url 'inspection_list' %}" class="btn btn-secondary">重置</a>
+        </div>
+    </div>
+</form>
+<!-- 记录表格 -->
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>姓名</th>
+            <th>巡检记录</th>
+            <th>异常记录</th>
+            <th>现场照片</th>
+            <th>巡检时间</th>
+            <th>位置信息</th>
+            <th>桩号</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.inspector.username }}</td>
+            <td>{{ record.get_inspection_result_display }}</td>
+            <td>{{ record.abnormal_record|default:"无" }}</td>
+            <td>
+                {% if record.photo %}
+                <img src="{{ record.photo.url }}" width="100" class="img-thumbnail">
+                {% else %}
+                无照片
+                {% endif %}
+            </td>
+            <td>{{ record.inspection_time|date:"Y-m-d H:i" }}</td>
+            <td>{{ record.location_info }}</td>
+            <td>{{ record.stake_number }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center">没有找到匹配的记录</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-  <script>
-    // 模拟数据（共12行）
-    const data = Array.from({ length: 20 }, (_, i) => [
-      `内容${i + 1}-1`, `内容${i + 1}-2`, `内容${i + 1}-3`,
-      `内容${i + 1}-4`, `内容${i + 1}-5`, `内容${i + 1}-6`,
-      `内容${i + 1}-7`
-    ]);
-
-    const rowsPerPage = 4;
-    let currentPage = 1;
-    const totalPages = Math.ceil(data.length / rowsPerPage);
-
-    function renderTable() {
-      const tbody = document.getElementById('table-body');
-      tbody.innerHTML = '';
-      const start = (currentPage - 1) * rowsPerPage;
-      const end = start + rowsPerPage;
-      const pageData = data.slice(start, end);
-
-      pageData.forEach(row => {
-        const tr = document.createElement('tr');
-        row.forEach(cell => {
-          const td = document.createElement('td');
-          td.textContent = cell;
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-
-      document.getElementById('page-info').textContent = `第 ${currentPage} 页`;
-    }
-
-    function nextPage() {
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderTable();
-      }
-    }
-
-    function prevPage() {
-      if (currentPage > 1) {
-        currentPage--;
-        renderTable();
-      }
-    }
-
-    // 初始化表格
-    renderTable();
-
-
-    function handleSearch(event) {
-        event.preventDefault(); // 阻止默认提交
-        const name = document.getElementById("name").value;
-        const pile = document.getElementById("pile").value;
-        const start = document.getElementById("start").value;
-        const end = document.getElementById("end").value;
-  
-        // 模拟查询逻辑
-        alert(`查询条件：\n姓名: ${name}\n桩号: ${pile}\n开始: ${start}\n结束: ${end}`);
+<!-- 分页 -->
+{% comment %} {% if is_paginated %} {% endcomment %}
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">上一页</a>
+        </li>
+        {% endif %}
         
-        // 实际项目中，可以用 fetch 发送请求到后端：
-        // fetch('/search', { method: 'POST', body: JSON.stringify({ name, pile, start, end }) })
-      }
-
-  </script>
-
-</body>
-</html>
+        <li class="page-item disabled">
+            <span class="page-link">
+                共 {{ page_obj.paginator.num_pages }} 页 第 {{ page_obj.number }} 页
+            </span>
+        </li>
+        
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">下一页</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>

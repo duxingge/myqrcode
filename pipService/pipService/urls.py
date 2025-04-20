@@ -24,7 +24,7 @@ from pipline import views
 from django.conf.urls.static import static
 from django.conf import settings
 from .views.pipdetails import PipelineListView
-from pipline.views import inspection_create, InspectionListView
+from pipline.views import inspection_create, InspectionListView,  inspector_search_api, stake_number_search_api
 
 
 urlpatterns = ([
@@ -51,6 +51,8 @@ urlpatterns = ([
     path('pipline/inspection/create/', inspection_create, name='inspection_create'),
     path('pipline/inspection/list/', InspectionListView.as_view(), name='inspection_list'),
     path('pipline/register/', views.register_view, name='register'),
+    path('pipline/inspection/inspector/search/', inspector_search_api, name='inspector-search'),
+    path('pipline/inspection/stake-numbers/search/', stake_number_search_api, name='stake-number-search'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )

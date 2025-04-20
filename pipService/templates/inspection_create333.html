@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>管道巡检信息</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0 20px 100px; /* 为底部按钮留空间 */
+    }
+
+    /* 头部区域 */
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .header img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* 表单区域 */
+    .form-section {
+      margin-top: 20px;
+      max-width: 600px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 80px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+    }
+
+    /* 上传按钮 */
+    input[type="file"] {
+      margin-top: 5px;
+    }
+
+    /* 获取位置按钮 */
+    .get-location-btn {
+      margin-top: 6px;
+      padding: 6px 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* 查询按钮固定底部 */
+    .bottom-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+    }
+
+    .bottom-btn button {
+      padding: 10px 30px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .bottom-btn button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 头部区域 -->
+  <div class="header">
+    <img src="http://www.shanxiranqi.ltd/static/shanxi_ranqi.png" alt="logo">
+    <div class="header-title">管道巡检信息</div>
+  </div>
+
+  <!-- 表单内容 -->
+  <div class="form-section">
+    
+    <!-- 巡检结果 -->
+    <div class="form-group">
+      <label>巡检结果：</label>
+      <div class="radio-group">
+        <label><input type="radio" name="result" value="正常"> 正常</label>
+        <label><input type="radio" name="result" value="异常"> 异常</label>
+      </div>
+    </div>
+
+    <!-- 异常情况记录 -->
+    <div class="form-group">
+      <label for="abnormal">异常情况记录：</label>
+      <textarea id="abnormal" placeholder="请输入异常信息（如有）"></textarea>
+    </div>
+
+    <!-- 现场照片上传 -->
+    <div class="form-group">
+      <label for="photo">现场照片上传：</label>
+      <input type="file" id="photo" accept="image/*" capture="environment">
+    </div>
+
+    <!-- 巡检人信息 -->
+    <div class="form-group">
+      <label for="username">用户名：</label>
+      <input type="text" id="username" placeholder="请输入用户名">
+    </div>
+
+    <div class="form-group">
+      <label for="phone">手机号：</label>
+      <input type="tel" id="phone" placeholder="请输入手机号">
+    </div>
+
+    <!-- 位置信息 -->
+    <div class="form-group">
+      <label>位置信息：</label>
+      <input type="text" id="location" placeholder="点击按钮获取当前位置" readonly>
+      <button class="get-location-btn" onclick="getLocation()">获取定位</button>
+    </div>
+
+    <!-- 桩号信息 -->
+    <div class="form-group">
+      <label for="stake">桩号信息：</label>
+      <input type="text" id="stake" placeholder="请输入桩号">
+    </div>
+  </div>
+
+  <!-- 底部查询按钮 -->
+  <div class="bottom-btn">
+    <button onclick="submitForm()">查询</button>
+  </div>
+
+  <script>
+    // 获取定位功能
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const lat = position.coords.latitude.toFixed(6);
+            const lon = position.coords.longitude.toFixed(6);
+            document.getElementById('location').value = `${lat}, ${lon}`;
+          },
+          function(error) {
+            alert("获取位置失败：" + error.message);
+          }
+        );
+      } else {
+        alert("浏览器不支持定位功能");
+      }
+    }
+
+    // 模拟查询提交
+    function submitForm() {
+      alert("正在进行查询...");
+      // 可以在这里收集表单数据进行处理
+    }
+  </script>
+
+</body>
+</html>
