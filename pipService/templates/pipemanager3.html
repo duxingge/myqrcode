@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line partrol Manager</title>
+    <style>
+
+        .container-header {
+            display: flex;
+            align-items: center;  /* 垂直居中对齐 */
+        }
+
+        .image {
+            width: 40px;  /* 图片的宽度 */
+            height: 40px;  /* 图片的高度 */
+            margin-right: 10px;  /* 图片和标题之间的间距 */
+            border-radius: 50%;  /* 圆形图片 */
+        }
+
+        .title {
+            font-size: 36px;  /* 标题的字体大小 */
+            padding-left:40px;
+        }
+
+
+        body {
+            background-image:url('http://www.shanxiranqi.ltd/static/back1.jpg');
+            background-size:cover;
+            height:100vh;
+        }
+
+        .container-subPage {
+            padding-left:80px;
+            margin-top:80px;
+            font-weight:bold;
+        }
+
+        .content {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            width: 300px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .menu {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+            margin-right: 15px;
+          }
+
+      
+        
+    </style>
+</head>
+<body>
+
+    <div class="container-header">
+        <img src="http://www.shanxiranqi.ltd/static/shanxi_ranqi.png" width="100px" height="100px">
+        <div class="title">
+            码上巡线管理平台
+        </div>
+    </div>
+
+
+    <div>
+        <span class="menu" onclick="showContent('content1')">管线信息管理</span>
+        <span class="menu" onclick="showContent('content2')">巡线记录管理</span>
+      </div>
+    
+      <div class="content">
+        <div id="content1">这是内容 1</div>
+        <div id="content2" class="hidden">这是内容 2</div>
+      </div>
+
+
+
+
+    <script>
+        function showContent(idToShow) {
+          const contents = ['content1', 'content2'];
+          contents.forEach(id => {
+            document.getElementById(id).classList.add('hidden');
+          });
+          document.getElementById(idToShow).classList.remove('hidden');
+        }
+      </script>
+    
+</body>
+</html>
