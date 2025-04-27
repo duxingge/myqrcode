@@ -20,6 +20,11 @@ from .forms import RegisterForm
 from django.utils import timezone
 from datetime import datetime
 from django.db.models import Q
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+from django.contrib.auth.models import User
+
+
 
 
 # 导入Pipeline数据到数据库
@@ -119,6 +124,39 @@ class InspectionListView(ListView):
                 pass
                 
         return queryset.filter(filters).order_by('-inspection_time')
+
+
+# 新增的API接口
+@require_GET
+def inspector_search_api(request):
+    """巡检人模糊查询接口"""
+    keyword = request.GET.get('keyword', '').strip()
+    
+    # if not keyword:
+    #     return JsonResponse([], safe=False)
+    
+    # 获取所有匹配的巡检人（去重）
+    inspectors = User.objects.filter(
+        Q(username__icontains=keyword),
+        Q(inspectionrecord__isnull=False)  # 确保有巡检记录
+    ).distinct().values_list('username', flat=True)
+    
+    return JsonResponse(list(inspectors), safe=False)
+
+@require_GET
+def stake_number_search_api(request):
+    """桩号模糊查询接口"""
+    keyword = request.GET.get('keyword', '').strip()
+    
+    if not keyword:
+        return JsonResponse([], safe=False)
+    
+    # 获取所有匹配的桩号（去重）
+    stake_numbers = InspectionRecord.objects.filter(
+        stake_number__icontains=keyword
+    ).order_by('stake_number').values_list('stake_number', flat=True).distinct()
+    
+    return JsonResponse(list(stake_numbers), safe=False)
 
 
 def register_view(request):
