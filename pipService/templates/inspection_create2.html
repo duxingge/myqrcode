@@ -1,225 +1,29 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <title>管道巡检信息</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0 20px 100px;
-    }
+{% comment %} {% extends 'base.html' %}
 
-    .header {
-      display: flex;
-      align-items: center;
-      padding: 20px 0;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .header img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      margin-right: 20px;
-    }
-
-    .header-title {
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .form-section {
-      margin-top: 20px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-
-    input[type="text"],
-    input[type="tel"],
-    textarea {
-      width: 100%;
-      padding: 8px;
-      box-sizing: border-box;
-    }
-
-    textarea {
-      resize: none;
-      overflow: hidden;
-      height: 80px;
-    }
-
-    .radio-group {
-      display: flex;
-      gap: 20px;
-    }
-
-    input[type="radio"] {
-      margin-right: 4px;
-    }
-
-    input[type="file"] {
-      margin-top: 5px;
-    }
-
-    .get-location-btn {
-      margin-top: 6px;
-      padding: 6px 12px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .get-location-btn:hover {
-      background-color: #0056b3;
-    }
-
-    .bottom-btn {
-      position: fixed;
-      bottom: 20px;
-      left: 0;
-      width: 100%;
-      text-align: center;
-    }
-
-    .bottom-btn button {
-      padding: 10px 30px;
-      font-size: 16px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .bottom-btn button:hover {
-      background-color: #218838;
-    }
-
-    /* 图片预览 */
-    #photo-preview {
-      margin-top: 10px;
-      max-width: 100%;
-      height: auto;
-      display: none;
-    }
-  </style>
-</head>
-<body>
-
-<div class="header">
-  <img src="http://www.shanxiranqi.ltd/static/shanxi_ranqi.png" alt="logo">
-  <div class="header-title">管道巡检信息</div>
-</div>
-
-<div class="form-section">
-  <form method="post" enctype="multipart/form-data">
+{% block content %} {% endcomment %}
+<h2>管道巡检</h2>
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-
-    <!-- 巡检结果 -->
-    <div class="form-group">
-      <label>巡检结果 *</label>
-      <div class="radio-group">
-        <label><input type="radio" name="inspection_result" value="正常">正常</label>
-        <label><input type="radio" name="inspection_result" value="异常">异常</label>
-      </div>
+    <div>
+        <label>巡检结果 *</label>
+        {{ form.inspection_result }}
     </div>
-
-    <!-- 异常情况记录 -->
-    <div class="form-group">
-      <label for="abnormal">异常情况记录</label>
-      <textarea id="abnormal" name="abnormal_record" placeholder="请输入异常信息（如有）"></textarea>
+    <div>
+        <label>异常情况记录</label>
+        {{ form.abnormal_record }}
     </div>
-
-    <!-- 现场照片上传 -->
-    <div class="form-group">
-      <label for="photo">现场照片上传</label>
-      <input type="file" id="photo" name="photo" accept="image/*" capture="environment">
-      <img id="photo-preview" alt="图片预览">
+    <div>
+        <label>现场照片</label>
+        {{ form.photo }}
     </div>
-
-
-    <!-- 位置信息 -->
-    <div class="form-group">
-      <label>位置信息 *</label>
-      <input type="text" id="location" name="location_info" placeholder="点击按钮获取当前位置" >
-      <button type="button" class="get-location-btn" onclick="getLocation()">获取定位</button>
+    <div>
+        <label>桩号</label>
+        {{ form.stake_number }}
     </div>
-
-    <!-- 桩号信息 -->
-    <div class="form-group">
-      <label for="stake">桩号信息</label>
-      <input type="text" id="stake" name="stake_number" placeholder="请输入桩号">
+    <div>
+        <label>位置信息 *</label>
+        {{ form.location_info }}
     </div>
-
-    <div class="bottom-btn">
-      <button type="submit" >提交</button>
-    </div>
-  </form>
-</div>
-
-<!-- 底部提交按钮 -->
-
-
-<script>
-  // 获取定位
-  function getLocation(event) {
-  event.preventDefault(); // 防止按钮点击提交表单
-
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      function(position) {
-        const lat = position.coords.latitude.toFixed(6);
-        const lon = position.coords.longitude.toFixed(6);
-        document.getElementById('location').value = `${lat}, ${lon}`;
-      },
-      function(error) {
-        alert("获取位置失败：" + error.message);
-      }
-    );
-  } else {
-    alert("浏览器不支持定位功能");
-  }
-}
-
-  // 图片预览
-  document.getElementById('photo').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    const preview = document.getElementById('photo-preview');
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        preview.src = e.target.result;
-        preview.style.display = 'block';
-      }
-      reader.readAsDataURL(file);
-    } else {
-      preview.src = '';
-      preview.style.display = 'none';
-    }
-  });
-
-  // 异常情况记录：textarea自动高度
-  const textarea = document.getElementById('abnormal');
-  textarea.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = (this.scrollHeight) + 'px';
-  });
-</script>
-
-</body>
-</html>
+    <button type="submit">提交</button>
+</form>
+{% comment %} {% endblock %} {% endcomment %}
