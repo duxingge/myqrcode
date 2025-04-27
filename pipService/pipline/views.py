@@ -77,6 +77,8 @@ def inspection_create(request):
             record.inspector = request.user
             record.save()
             return redirect('inspection_list')
+        else:
+            print(form.errors)  # 打印错误信息
     else:
         form = InspectionRecordForm()
     return render(request, 'inspection_create.html', {'form': form})
