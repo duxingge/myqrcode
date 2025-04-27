@@ -117,7 +117,7 @@
         <select id="name" name="name">
           <option value="">-- 请选择姓名 --</option>
           <option value="wjx1">wjx1</option>
-          <option value="wjw">wjw</option>
+          <option value="李四">李四</option>
           <option value="王五">王五</option>
         </select>
     
@@ -181,74 +181,73 @@
 
     const rowsPerPage = 6;
     let currentPage = 1;
-
     const totalPages = Math.ceil({{records|length}} / rowsPerPage);
 
-    const records = [
-    {% for record in records %}
-      {
-        name: "{{ record.inspector.username|escapejs }}",
-        stake: "{{ record.stake_number }}",
-        result: "{{ record.get_inspection_result_display|escapejs }}",
-        exception: "{{ record.abnormal_record|default:'无'|escapejs }}",
-        photo: "{% if record.photo %}{{ record.photo.url }}{% else %}{% endif %}",
-        time: "{{ record.inspection_time|date:'Y-m-d H:i' }}",
-        location: "{{ record.location_info|escapejs }}"
-      }{% if not forloop.last %},{% endif %}
-    {% endfor %}
-  ];
+    function renderTable() {
+      printLog("开始enderTable");
+      printLog({record.inspector.username});
+      printLog("结束输出");
 
-  function renderTable() {
-    const tbody = document.getElementById('table-body');
-    tbody.innerHTML = '';
-  
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const paginatedRecords = records.slice(start, end);
-  
-    paginatedRecords.forEach(record => {
-      const tr = document.createElement('tr');
-  
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = '';
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const pageData = records[start:end];
+
+      {% for record in pageData %}
+      printLog("开始输出");
+      printLog({record.inspector.username});
+      printLog("结束输出");
+
+      const trRecordItem = document.createElement('tr');
+
+      
       const tdName = document.createElement('td');
-      tdName.textContent = record.name;
-      tr.appendChild(tdName);
-  
-      const tdStake = document.createElement('td');
-      tdStake.textContent = record.stake;
-      tr.appendChild(tdStake);
-  
-      const tdResult = document.createElement('td');
-      tdResult.textContent = record.result;
-      tr.appendChild(tdResult);
-  
+      trRecordItem.appendChild(tdName);
+      tdName.textContent = {{ record.inspector.username }}
+
+      const tdStakeNumber = document.createElement('td');
+      trRecordItem.appendChild(tdStakeNumber);
+      tdStakeNumber.textContent = {{ record.stake_number }}</td>
+
+      const tdDisplay = document.createElement('td');
+      trRecordItem.appendChild(tdDisplay);
+      tdDisplay.textContent = {{ record.get_inspection_result_display }}
+
       const tdException = document.createElement('td');
-      tdException.textContent = record.exception || "无";
-      tr.appendChild(tdException);
-  
+      trRecordItem.appendChild(tdException);
+      tdException.textContent = {{ record.abnormal_record|default:"无" }}
+
       const tdImg = document.createElement('td');
-      if (record.photo) {
-        const img = document.createElement('img');
-        img.src = record.photo;
-        img.width = 100;
-        tdImg.appendChild(img);
-      } else {
-        tdImg.textContent = "无照片";
-      }
-      tr.appendChild(tdImg);
-  
-      const tdTime = document.createElement('td');
-      tdTime.textContent = record.time;
-      tr.appendChild(tdTime);
-  
-      const tdLocation = document.createElement('td');
-      tdLocation.textContent = record.location;
-      tr.appendChild(tdLocation);
-  
-      tbody.appendChild(tr);
-    });
-  
-    document.getElementById('page-info').textContent = `第 ${currentPage} 页`;
-  }
+      trRecordItem.appendChild(tdImg);
+      {% if record.photo %}
+
+      const img = document.createElement('img');
+      img.src = {{ record.photo.url }};
+      img.width = 100;
+      tdImg.appendChild(img);
+
+      {% else %}
+      tdImg.textContent="无照片";
+      {% endif %}
+
+
+
+      const tdDate = document.createElement('td');
+      trRecordItem.appendChild(tdDate);
+      tdDate.textContent = {{ record.inspection_time|date:"Y-m-d H:i" }};
+
+      const tdLocationInfo = document.createElement('td');
+      trRecordItem.appendChild(tdLocationInfo);
+      tdLocationInfo.textContent = {{ record.location_info }};
+
+      tbody.appendChild(trRecordItem);
+      {% empty %}
+
+      {% endfor %}
+
+      document.getElementById('page-info').textContent = `第 ${currentPage} 页`;
+    }
 
     function nextPage() {
       if (currentPage < totalPages) {
@@ -270,7 +269,11 @@
 
     function handleSearch(event) {
         event.preventDefault(); // 阻止默认提交
-      
+        {% comment %} const name = document.getElementById("name").value;
+        const pile = document.getElementById("pile").value;
+        const start = document.getElementById("start").value;
+        const end = document.getElementById("end").value; {% endcomment %}
+  
 
         const form = document.getElementById('searchForm');
         const formData = new FormData(form);

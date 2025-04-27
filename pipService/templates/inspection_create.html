@@ -8,10 +8,9 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0 20px 100px; /* 为底部按钮留空间 */
+      padding: 0 20px 100px;
     }
 
-    /* 头部区域 */
     .header {
       display: flex;
       align-items: center;
@@ -31,10 +30,11 @@
       font-weight: bold;
     }
 
-    /* 表单区域 */
     .form-section {
       margin-top: 20px;
       max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .form-group {
@@ -56,7 +56,8 @@
     }
 
     textarea {
-      resize: vertical;
+      resize: none;
+      overflow: hidden;
       height: 80px;
     }
 
@@ -65,12 +66,14 @@
       gap: 20px;
     }
 
-    /* 上传按钮 */
+    input[type="radio"] {
+      margin-right: 4px;
+    }
+
     input[type="file"] {
       margin-top: 5px;
     }
 
-    /* 获取位置按钮 */
     .get-location-btn {
       margin-top: 6px;
       padding: 6px 12px;
@@ -81,7 +84,10 @@
       cursor: pointer;
     }
 
-    /* 查询按钮固定底部 */
+    .get-location-btn:hover {
+      background-color: #0056b3;
+    }
+
     .bottom-btn {
       position: fixed;
       bottom: 20px;
@@ -103,95 +109,117 @@
     .bottom-btn button:hover {
       background-color: #218838;
     }
+
+    /* 图片预览 */
+    #photo-preview {
+      margin-top: 10px;
+      max-width: 100%;
+      height: auto;
+      display: none;
+    }
   </style>
 </head>
 <body>
 
-  <!-- 头部区域 -->
-  <div class="header">
-    <img src="http://www.shanxiranqi.ltd/static/shanxi_ranqi.png" alt="logo">
-    <div class="header-title">管道巡检信息</div>
-  </div>
+<div class="header">
+  <img src="http://www.shanxiranqi.ltd/static/shanxi_ranqi.png" alt="logo">
+  <div class="header-title">管道巡检信息</div>
+</div>
 
-  <!-- 表单内容 -->
-  <div class="form-section">
-    
+<div class="form-section">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
     <!-- 巡检结果 -->
     <div class="form-group">
-      <label>巡检结果：</label>
+      <label>巡检结果 *</label>
       <div class="radio-group">
-        <label><input type="radio" name="result" value="正常"> 正常</label>
-        <label><input type="radio" name="result" value="异常"> 异常</label>
+        <label><input type="radio" name="inspection_result" value="正常">正常</label>
+        <label><input type="radio" name="inspection_result" value="异常">异常</label>
       </div>
     </div>
 
     <!-- 异常情况记录 -->
     <div class="form-group">
-      <label for="abnormal">异常情况记录：</label>
-      <textarea id="abnormal" placeholder="请输入异常信息（如有）"></textarea>
+      <label for="abnormal">异常情况记录</label>
+      <textarea id="abnormal" name="abnormal_record" placeholder="请输入异常信息（如有）"></textarea>
     </div>
 
     <!-- 现场照片上传 -->
     <div class="form-group">
-      <label for="photo">现场照片上传：</label>
-      <input type="file" id="photo" accept="image/*" capture="environment">
+      <label for="photo">现场照片上传</label>
+      <input type="file" id="photo" name="photo" accept="image/*" capture="environment">
+      <img id="photo-preview" alt="图片预览">
     </div>
 
-    <!-- 巡检人信息 -->
-    <div class="form-group">
-      <label for="username">用户名：</label>
-      <input type="text" id="username" placeholder="请输入用户名">
-    </div>
-
-    <div class="form-group">
-      <label for="phone">手机号：</label>
-      <input type="tel" id="phone" placeholder="请输入手机号">
-    </div>
 
     <!-- 位置信息 -->
     <div class="form-group">
-      <label>位置信息：</label>
-      <input type="text" id="location" placeholder="点击按钮获取当前位置" readonly>
-      <button class="get-location-btn" onclick="getLocation()">获取定位</button>
+      <label>位置信息 *</label>
+      <input type="text" id="location" name="location_info" placeholder="点击按钮获取当前位置" >
+      <button type="button" class="get-location-btn" onclick="getLocation()">获取定位</button>
     </div>
 
     <!-- 桩号信息 -->
     <div class="form-group">
-      <label for="stake">桩号信息：</label>
-      <input type="text" id="stake" placeholder="请输入桩号">
+      <label for="stake">桩号信息</label>
+      <input type="text" id="stake" name="stake_number" placeholder="请输入桩号">
     </div>
-  </div>
 
-  <!-- 底部查询按钮 -->
-  <div class="bottom-btn">
-    <button onclick="submitForm()">查询</button>
-  </div>
+    <div class="bottom-btn">
+      <button type="submit" >提交</button>
+    </div>
+  </form>
+</div>
 
-  <script>
-    // 获取定位功能
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function(position) {
-            const lat = position.coords.latitude.toFixed(6);
-            const lon = position.coords.longitude.toFixed(6);
-            document.getElementById('location').value = `${lat}, ${lon}`;
-          },
-          function(error) {
-            alert("获取位置失败：" + error.message);
-          }
-        );
-      } else {
-        alert("浏览器不支持定位功能");
+<!-- 底部提交按钮 -->
+
+
+<script>
+  // 获取定位
+  function getLocation(event) {
+  event.preventDefault(); // 防止按钮点击提交表单
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        const lat = position.coords.latitude.toFixed(6);
+        const lon = position.coords.longitude.toFixed(6);
+        document.getElementById('location').value = `${lat}, ${lon}`;
+      },
+      function(error) {
+        alert("获取位置失败：" + error.message);
       }
-    }
+    );
+  } else {
+    alert("浏览器不支持定位功能");
+  }
+}
 
-    // 模拟查询提交
-    function submitForm() {
-      alert("正在进行查询...");
-      // 可以在这里收集表单数据进行处理
+  // 图片预览
+  document.getElementById('photo').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('photo-preview');
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      }
+      reader.readAsDataURL(file);
+    } else {
+      preview.src = '';
+      preview.style.display = 'none';
     }
-  </script>
+  });
+
+  // 异常情况记录：textarea自动高度
+  const textarea = document.getElementById('abnormal');
+  textarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+  });
+</script>
 
 </body>
 </html>
