@@ -1,6 +1,3 @@
-{% comment %} {% extends 'base.html' %}
-
-{% block content %} {% endcomment %}
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -116,8 +113,8 @@
         <label for="name">姓名：</label>
         <select id="name" name="name">
           <option value="">-- 请选择姓名 --</option>
-          <option value="张三">张三</option>
-          <option value="李四">李四</option>
+          <option value="wjx1">wjx1</option>
+          <option value="wjw">wjw</option>
           <option value="王五">王五</option>
         </select>
     
@@ -170,36 +167,85 @@
   </div>
 
   <script>
-    // 模拟数据（共12行）
+
+    
+    // 模拟数据（共20行）
     const data = Array.from({ length: 20 }, (_, i) => [
       `内容${i + 1}-1`, `内容${i + 1}-2`, `内容${i + 1}-3`,
       `内容${i + 1}-4`, `内容${i + 1}-5`, `内容${i + 1}-6`,
       `内容${i + 1}-7`
     ]);
 
-    const rowsPerPage = 4;
+    const rowsPerPage = 6;
     let currentPage = 1;
-    const totalPages = Math.ceil(data.length / rowsPerPage);
 
-    function renderTable() {
-      const tbody = document.getElementById('table-body');
-      tbody.innerHTML = '';
-      const start = (currentPage - 1) * rowsPerPage;
-      const end = start + rowsPerPage;
-      const pageData = data.slice(start, end);
+    const totalPages = Math.ceil({{records|length}} / rowsPerPage);
 
-      pageData.forEach(row => {
-        const tr = document.createElement('tr');
-        row.forEach(cell => {
-          const td = document.createElement('td');
-          td.textContent = cell;
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
+    const records = [
+    {% for record in records %}
+      {
+        name: "{{ record.inspector.username|escapejs }}",
+        stake: "{{ record.stake_number }}",
+        result: "{{ record.get_inspection_result_display|escapejs }}",
+        exception: "{{ record.abnormal_record|default:'无'|escapejs }}",
+        photo: "{% if record.photo %}{{ record.photo.url }}{% else %}{% endif %}",
+        time: "{{ record.inspection_time|date:'Y-m-d H:i' }}",
+        location: "{{ record.location_info|escapejs }}"
+      }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
 
-      document.getElementById('page-info').textContent = `第 ${currentPage} 页`;
-    }
+  function renderTable() {
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = '';
+  
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedRecords = records.slice(start, end);
+  
+    paginatedRecords.forEach(record => {
+      const tr = document.createElement('tr');
+  
+      const tdName = document.createElement('td');
+      tdName.textContent = record.name;
+      tr.appendChild(tdName);
+  
+      const tdStake = document.createElement('td');
+      tdStake.textContent = record.stake;
+      tr.appendChild(tdStake);
+  
+      const tdResult = document.createElement('td');
+      tdResult.textContent = record.result;
+      tr.appendChild(tdResult);
+  
+      const tdException = document.createElement('td');
+      tdException.textContent = record.exception || "无";
+      tr.appendChild(tdException);
+  
+      const tdImg = document.createElement('td');
+      if (record.photo) {
+        const img = document.createElement('img');
+        img.src = record.photo;
+        img.width = 100;
+        tdImg.appendChild(img);
+      } else {
+        tdImg.textContent = "无照片";
+      }
+      tr.appendChild(tdImg);
+  
+      const tdTime = document.createElement('td');
+      tdTime.textContent = record.time;
+      tr.appendChild(tdTime);
+  
+      const tdLocation = document.createElement('td');
+      tdLocation.textContent = record.location;
+      tr.appendChild(tdLocation);
+  
+      tbody.appendChild(tr);
+    });
+  
+    document.getElementById('page-info').textContent = `第 ${currentPage} 页`;
+  }
 
     function nextPage() {
       if (currentPage < totalPages) {
@@ -221,16 +267,20 @@
 
     function handleSearch(event) {
         event.preventDefault(); // 阻止默认提交
-        const name = document.getElementById("name").value;
-        const pile = document.getElementById("pile").value;
-        const start = document.getElementById("start").value;
-        const end = document.getElementById("end").value;
-  
-        // 模拟查询逻辑
-        alert(`查询条件：\n姓名: ${name}\n桩号: ${pile}\n开始: ${start}\n结束: ${end}`);
-        
-        // 实际项目中，可以用 fetch 发送请求到后端：
-        // fetch('/search', { method: 'POST', body: JSON.stringify({ name, pile, start, end }) })
+      
+
+        const form = document.getElementById('searchForm');
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
+
+        for (const [key, value] of formData.entries()) {
+            if (value.trim() !== '') {
+                params.append(key, value);
+            }
+        }
+
+        const baseUrl = window.location.origin + window.location.pathname;
+        window.location.href = `${baseUrl}?${params.toString()}`;
       }
 
   </script>

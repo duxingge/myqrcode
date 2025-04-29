@@ -1,146 +1,162 @@
-{% comment %} {% extends 'base.html' %}
-
-{% block content %} {% endcomment %}
 <!DOCTYPE html>
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>带分页的表格</title>
+  <title>带分页的巡检记录表格</title>
   <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 30px;
+      padding-bottom: 80px;
+      min-height: 100vh;
+      background: #f5f7fa;
+    }
+
     table {
       border-collapse: collapse;
       width: 80%;
-      margin-top: 20px;
       margin: 0 auto;
+      margin-top: 20px;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     th, td {
-      border: 1px solid #999;
+      border: 1px solid #ddd;
       padding: 10px;
       text-align: center;
     }
 
     th {
-      background-color: #87CEEB;
+      background-color: #007bff;
+      color: white;
     }
 
     .pagination {
-      
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        padding: 20px 0;
-        background-color: #f8f8f8;
-        border-top: 1px solid #ddd;
-        text-align:center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 20px 0;
+      background-color: #f8f8f8;
+      border-top: 1px solid #ddd;
     }
 
     .pagination button {
-        margin: 0 10px;
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
+      margin: 0 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
 
     .pagination button:hover {
-        background-color: #0056b3;
-      }
+      background-color: #0056b3;
+    }
 
+    form {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
 
-    body {
-        font-family: sans-serif;
-        padding: 30px;
-        padding-bottom: 80px; /* 防止内容被按钮遮住 */
-        min-height: 100vh;
-        margin:0;
-      }
-  
-      form {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        flex-wrap: wrap; /* 保证在小屏幕时换行 */
-        justify-content:center;
-      }
-  
-      select,
-      input[type="datetime-local"],
-      button {
-        padding: 6px 10px;
-        font-size: 14px;
-      }
-  
-      button {
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-  
-      button:hover {
-        background-color: #0056b3;
-      }
-  
-      label {
-        font-weight: bold;
-        margin-right: 4px;
-      }
-  
-      .form-item {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
+    input[type="text"], input[type="datetime-local"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+      width: 200px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
 
-      .patrolReport {
-        margin-top:100px;
-        margin-bottom:100px;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-      }
+    input[type="text"]:focus, input[type="datetime-local"]:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0,123,255,0.5);
+      outline: none;
+    }
 
+    button[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    .patrolReport {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    /* 下拉提示框 */
+    .suggestion-box {
+      position: absolute;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 999;
+      display: none;
+    }
+
+    .suggestion-box div {
+      padding: 8px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .suggestion-box div:hover,
+    .suggestion-box .selected {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .suggestion-box span.icon {
+      margin-right: 8px;
+    }
   </style>
 </head>
 <body>
 
-    <form id="searchForm" onsubmit="handleSearch(event)">
-        <label for="name">姓名：</label>
-        <select id="name" name="name">
-          <option value="">-- 请选择姓名 --</option>
-          <option value="wjx1">wjx1</option>
-          <option value="李四">李四</option>
-          <option value="王五">王五</option>
-        </select>
-    
-        <label for="pile">桩号：</label>
-        <select id="pile" name="pile">
-          <option value="">-- 请选择桩号 --</option>
-          <option value="A001">A001</option>
-          <option value="B002">B002</option>
-          <option value="C003">C003</option>
-        </select>
-    
-        <label for="start">开始时间：</label>
-        <input type="datetime-local" id="start" name="start">
-    
-        <label for="end">结束时间：</label>
-        <input type="datetime-local" id="end" name="end">
-    
-        <button type="submit">查询</button>
-      </form>
+  <form id="searchForm" onsubmit="handleSearch(event)">
+    <label for="name">姓名：</label>
+    <input type="text" id="name" name="name" autocomplete="off">
 
-      <div class="patrolReport" > 
-        <label for="text" style="font-size: 32px"> 巡检记录报表</label>
-      </div>
+    <label for="pile">桩号：</label>
+    <input type="text" id="pile" name="pile" autocomplete="off">
+
+    <label for="start">开始时间：</label>
+    <input type="datetime-local" id="start" name="start">
+
+    <label for="end">结束时间：</label>
+    <input type="datetime-local" id="end" name="end">
+
+    <button type="submit">查询</button>
+  </form>
+
+  <div class="patrolReport">巡检记录报表</div>
 
   <table>
     <thead>
@@ -152,99 +168,67 @@
         <th>现场照片</th>
         <th>巡检时间</th>
         <th>位置信息</th>
-        
       </tr>
     </thead>
     <tbody id="table-body">
-      <!-- JS 渲染内容行 -->
+      <!-- JS 渲染内容 -->
     </tbody>
   </table>
 
-  <div class="pagination" >
+  <div class="pagination">
     <button onclick="prevPage()">上一页</button>
     <div style="padding-top:10px">
-        <span id="page-info" >第 1 页</span>
+      <span id="page-info">第 1 页</span>
     </div>
-    
     <button onclick="nextPage()">下一页</button>
   </div>
 
+  <div id="name-suggestions" class="suggestion-box"></div>
+  <div id="pile-suggestions" class="suggestion-box"></div>
+
   <script>
-
-    
-    // 模拟数据（共20行）
-    const data = Array.from({ length: 20 }, (_, i) => [
-      `内容${i + 1}-1`, `内容${i + 1}-2`, `内容${i + 1}-3`,
-      `内容${i + 1}-4`, `内容${i + 1}-5`, `内容${i + 1}-6`,
-      `内容${i + 1}-7`
-    ]);
-
+    // 数据初始化
     const rowsPerPage = 6;
     let currentPage = 1;
-    const totalPages = Math.ceil({{records|length}} / rowsPerPage);
+
+    const records = [
+      {% for record in records %}
+      {
+        name: "{{ record.inspector.username|escapejs }}",
+        stake: "{{ record.stake_number }}",
+        result: "{{ record.get_inspection_result_display|escapejs }}",
+        exception: "{{ record.abnormal_record|default:'无'|escapejs }}",
+        photo: "{% if record.photo %}{{ record.photo.url }}{% else %}{% endif %}",
+        time: "{{ record.inspection_time|date:'Y-m-d H:i' }}",
+        location: "{{ record.location_info|escapejs }}"
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ];
+
+    const totalPages = Math.ceil(records.length / rowsPerPage);
 
     function renderTable() {
-      printLog("开始enderTable");
-      printLog({record.inspector.username});
-      printLog("结束输出");
-
       const tbody = document.getElementById('table-body');
       tbody.innerHTML = '';
+
       const start = (currentPage - 1) * rowsPerPage;
       const end = start + rowsPerPage;
-      const pageData = records[start:end];
+      const paginatedRecords = records.slice(start, end);
 
-      {% for record in pageData %}
-      printLog("开始输出");
-      printLog({record.inspector.username});
-      printLog("结束输出");
+      paginatedRecords.forEach(record => {
+        const tr = document.createElement('tr');
 
-      const trRecordItem = document.createElement('tr');
-
-      
-      const tdName = document.createElement('td');
-      trRecordItem.appendChild(tdName);
-      tdName.textContent = {{ record.inspector.username }}
-
-      const tdStakeNumber = document.createElement('td');
-      trRecordItem.appendChild(tdStakeNumber);
-      tdStakeNumber.textContent = {{ record.stake_number }}</td>
-
-      const tdDisplay = document.createElement('td');
-      trRecordItem.appendChild(tdDisplay);
-      tdDisplay.textContent = {{ record.get_inspection_result_display }}
-
-      const tdException = document.createElement('td');
-      trRecordItem.appendChild(tdException);
-      tdException.textContent = {{ record.abnormal_record|default:"无" }}
-
-      const tdImg = document.createElement('td');
-      trRecordItem.appendChild(tdImg);
-      {% if record.photo %}
-
-      const img = document.createElement('img');
-      img.src = {{ record.photo.url }};
-      img.width = 100;
-      tdImg.appendChild(img);
-
-      {% else %}
-      tdImg.textContent="无照片";
-      {% endif %}
-
-
-
-      const tdDate = document.createElement('td');
-      trRecordItem.appendChild(tdDate);
-      tdDate.textContent = {{ record.inspection_time|date:"Y-m-d H:i" }};
-
-      const tdLocationInfo = document.createElement('td');
-      trRecordItem.appendChild(tdLocationInfo);
-      tdLocationInfo.textContent = {{ record.location_info }};
-
-      tbody.appendChild(trRecordItem);
-      {% empty %}
-
-      {% endfor %}
+        tr.innerHTML = `
+          <td>${record.name}</td>
+          <td>${record.stake}</td>
+          <td>${record.result}</td>
+          <td>${record.exception || '无'}</td>
+          <td>${record.photo ? '<img src="'+record.photo+'" width="100">' : '无照片'}</td>
+          <td>${record.time}</td>
+          <td>${record.location}</td>
+        `;
+        tbody.appendChild(tr);
+      });
 
       document.getElementById('page-info').textContent = `第 ${currentPage} 页`;
     }
@@ -263,32 +247,138 @@
       }
     }
 
-    // 初始化表格
     renderTable();
 
-
     function handleSearch(event) {
-        event.preventDefault(); // 阻止默认提交
-        {% comment %} const name = document.getElementById("name").value;
-        const pile = document.getElementById("pile").value;
-        const start = document.getElementById("start").value;
-        const end = document.getElementById("end").value; {% endcomment %}
-  
+      event.preventDefault();
+      const form = document.getElementById('searchForm');
+      const formData = new FormData(form);
+      const params = new URLSearchParams();
 
-        const form = document.getElementById('searchForm');
-        const formData = new FormData(form);
-        const params = new URLSearchParams();
-
-        for (const [key, value] of formData.entries()) {
-            if (value.trim() !== '') {
-                params.append(key, value);
-            }
+      // 保存表单的查询条件到 localStorage
+      formData.forEach((value, key) => {
+        localStorage.setItem(key, value);  // 保存每个查询条件
+        if (value.trim() !== '') {
+          params.append(key, value);
         }
+      });
 
-        const baseUrl = window.location.origin + window.location.pathname;
-        window.location.href = `${baseUrl}?${params.toString()}`;
+      const baseUrl = window.location.origin + window.location.pathname;
+      window.location.href = `${baseUrl}?${params.toString()}`;
+    }
+
+    // 页面加载时，填充表单字段
+    document.addEventListener('DOMContentLoaded', function() {
+      const name = localStorage.getItem('name');
+      const pile = localStorage.getItem('pile');
+      const start = localStorage.getItem('start');
+      const end = localStorage.getItem('end');
+
+      if (name) document.getElementById('name').value = name;
+      if (pile) document.getElementById('pile').value = pile;
+      if (start) document.getElementById('start').value = start;
+      if (end) document.getElementById('end').value = end;
+
+      // 自动完成初始化
+      setupAutocomplete('name', 'name-suggestions', 
+        'http://localhost:8003/pipline/inspection/inspector/search/', 
+        'http://localhost:8003/pipline/inspection/inspector/search/?keyword=', '👤');
+
+      setupAutocomplete('pile', 'pile-suggestions', 
+        'http://localhost:8003/pipline/inspection/stake-numbers/search/?keyword=', 
+        'http://localhost:8003/pipline/inspection/stake-numbers/search/?keyword=', '📍');
+    });
+
+    function setupAutocomplete(inputId, suggestionBoxId, allUrl, searchUrl, icon) {
+      const input = document.getElementById(inputId);
+      const box = document.getElementById(suggestionBoxId);
+      let activeIndex = -1;
+      let suggestions = [];
+
+      input.addEventListener('focus', () => {
+        fetchSuggestions(allUrl);
+      });
+
+      input.addEventListener('input', () => {
+        const keyword = input.value.trim();
+        if (keyword === '') {
+          fetchSuggestions(allUrl);
+        } else {
+          fetchSuggestions(searchUrl + encodeURIComponent(keyword));
+        }
+      });
+
+      input.addEventListener('keydown', function(e) {
+        if (box.style.display === 'none') return;
+
+        const items = box.querySelectorAll('div');
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          activeIndex = (activeIndex + 1) % items.length;
+          updateActive(items);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          activeIndex = (activeIndex - 1 + items.length) % items.length;
+          updateActive(items);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (activeIndex >= 0 && activeIndex < items.length) {
+            input.value = items[activeIndex].innerText.trim().substring(2);
+            box.style.display = 'none';
+          }
+        }
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!box.contains(e.target) && e.target !== input) {
+          box.style.display = 'none';
+        }
+      });
+
+      function fetchSuggestions(url) {
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            suggestions = data;
+            renderSuggestions();
+          })
+          .catch(err => {
+            console.error(err);
+            box.style.display = 'none';
+          });
       }
 
+      function renderSuggestions() {
+        box.innerHTML = '';
+        activeIndex = -1;
+        if (suggestions.length === 0) {
+          box.style.display = 'none';
+          return;
+        }
+        suggestions.forEach(item => {
+          const div = document.createElement('div');
+          div.innerHTML = `<span class="icon">${icon}</span> ${item}`;
+          div.addEventListener('click', function() {
+            input.value = item;
+            box.style.display = 'none';
+          });
+          box.appendChild(div);
+        });
+        const rect = input.getBoundingClientRect();
+        box.style.top = (window.scrollY + rect.bottom) + 'px';
+        box.style.left = (window.scrollX + rect.left) + 'px';
+        box.style.width = rect.width + 'px';
+        box.style.display = 'block';
+      }
+
+      function updateActive(items) {
+        items.forEach(item => item.classList.remove('selected'));
+        if (activeIndex >= 0) {
+          items[activeIndex].classList.add('selected');
+          items[activeIndex].scrollIntoView({ block: 'nearest' });
+        }
+      }
+    }
   </script>
 
 </body>
