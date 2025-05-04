@@ -23,6 +23,8 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 
 
@@ -83,6 +85,7 @@ def inspection_create(request):
         form = InspectionRecordForm()
     return render(request, 'inspection_create.html', {'form': form})
 
+@method_decorator(xframe_options_exempt, name='dispatch')
 class InspectionListView(ListView):
     model = InspectionRecord
     template_name = 'inspection_list.html'

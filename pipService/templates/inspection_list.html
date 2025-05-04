@@ -4,7 +4,14 @@
   <meta charset="UTF-8">
   <title>带分页的巡检记录表格</title>
   <style>
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
     body {
+      background-image:url('http://www.shanxiranqi.ltd/static/back1.jpg');
       font-family: sans-serif;
       margin: 0;
       padding: 30px;
@@ -139,6 +146,7 @@
   </style>
 </head>
 <body>
+  <h1 >巡检记录报表</h1> 
 
   <form id="searchForm" onsubmit="handleSearch(event)">
     <label for="name">姓名：</label>
@@ -156,7 +164,7 @@
     <button type="submit">查询</button>
   </form>
 
-  <div class="patrolReport">巡检记录报表</div>
+ 
 
   <table>
     <thead>

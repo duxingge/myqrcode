@@ -1,1 +1,196 @@
-test
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>码上巡线管理平台</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background-image: url('http://www.shanxiranqi.ltd/static/back1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      color: #fff;
+      display: flex;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      height: 100vh;
+      width: 100%;
+      display: flex;
+    }
+
+    .menu-bar {
+      width: 250px;
+      background-color: rgba(0, 0, 0, 0.7);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: width 0.3s ease;
+      height: 100vh;
+      position: relative;
+      padding-top: 20px;
+    }
+
+    .menu-bar.collapsed {
+      width: 80px;
+    }
+
+    .container-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+      padding-bottom: 20px;
+      width: 100%;
+    }
+
+    .container-header img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .menu-bar.collapsed .title {
+      display: none;
+    }
+
+    .menu-toggle {
+      font-size: 22px;
+      color: #add8ff;
+      cursor: pointer;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .menu-items {
+      display: flex;
+      flex-direction: column; /* 垂直排列 */
+      align-items: center; /* 水平居中 */
+      width: 100%;
+      padding: 20px;
+    }
+
+    .menu {
+      cursor: pointer;
+      color: #add8ff;
+      text-decoration: none;
+      margin-bottom: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: center; /* 水平居中 */
+    }
+
+    .menu i {
+      margin-right: 10px;
+      color: inherit;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .menu:hover {
+      color: #fff;
+    }
+
+    .menu.active {
+      color: #007BFF;
+    }
+
+    .menu.active i {
+      color: #007BFF;
+    }
+
+    .menu-bar.collapsed .menu span {
+      display: none;
+    }
+
+    #subPageFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      background-color: white;
+    }
+
+    .content-wrapper {
+      flex-grow: 1;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <!-- 左侧菜单栏 -->
+    <div class="menu-bar" id="menuBar">
+      <!-- 头像 -->
+      <div class="container-header">
+        <img src="http://www.shanxiranqi.ltd/static/shanxi_ranqi.png" alt="logo" />
+        <div class="title">码上巡线管理平台</div>
+      </div>
+
+      <!-- 收起按钮 -->
+      <i class="fas fa-bars menu-toggle" onclick="toggleMenu()"></i>
+
+      <!-- 菜单项容器 -->
+      <div class="menu-items">
+        <div class="menu active" onclick="showContent('content1', this)">
+          <i class="fas fa-cogs"></i>
+          <span>管线信息管理</span>
+        </div>
+        <div class="menu" onclick="showContent('content2', this)">
+          <i class="fas fa-book"></i>
+          <span>巡线记录管理</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧内容区域 -->
+    <div class="content-wrapper">
+      <iframe id="subPageFrame" src="qrcode/"></iframe>
+    </div>
+  </div>
+
+  <script>
+    function showContent(page, el) {
+      const iframe = document.getElementById("subPageFrame");
+      iframe.style.display = "block";
+
+      const menus = document.querySelectorAll(".menu");
+      menus.forEach(menu => menu.classList.remove("active"));
+      el.classList.add("active");
+
+      iframe.src = page === 'content1' ? 'qrcode/' : 'list/';
+    }
+
+    function toggleMenu() {
+      const menuBar = document.getElementById("menuBar");
+      menuBar.classList.toggle("collapsed");
+    }
+
+    window.onload = () => {
+      showContent('content1', document.querySelector('.menu'));
+    };
+  </script>
+</body>
+</html>

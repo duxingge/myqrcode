@@ -22,6 +22,7 @@ from pipline.models import Pipelines
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 from pipline.models import PipelinesConifg
 
@@ -189,7 +190,7 @@ def setproerties(request):
     properties.set_property(name, value)
     return HttpResponse("<p>修改成功</p>")
 
-
+@method_decorator(xframe_options_exempt, name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class PipelineListView(APIView):
     def get(self, request):
