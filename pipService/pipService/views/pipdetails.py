@@ -41,7 +41,7 @@ def getPipdetailsByCode(request, code):
 
 
 def getPipNavigateByCode(request, code):
-    return render(request, 'pipnavigate.html',{"pipDetails": views.get_pipeline_data_by_code(request, code)})
+    return render(request, 'pipnavigate.html')
 
 
 @login_required
