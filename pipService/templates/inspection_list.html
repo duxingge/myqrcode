@@ -275,6 +275,9 @@
       window.location.href = `${baseUrl}?${params.toString()}`;
     }
 
+    const isLocal = false;
+    const BASE_URL = isLocal ? "http://localhost:8003" : "http://www.shanxiranqi.ltd";
+
     // 页面加载时，填充表单字段
     document.addEventListener('DOMContentLoaded', function() {
       const name = localStorage.getItem('name');
@@ -289,12 +292,12 @@
 
       // 自动完成初始化
       setupAutocomplete('name', 'name-suggestions', 
-        'http://localhost:8002/pipline/inspection/inspector/search/', 
-        'http://localhost:8002/pipline/inspection/inspector/search/?keyword=', '👤');
+        '/pipline/inspection/inspector/search/', 
+        '/pipline/inspection/inspector/search/?keyword=', '👤');
 
       setupAutocomplete('pile', 'pile-suggestions', 
-        'http://localhost:8002/pipline/inspection/stake-numbers/search/?keyword=', 
-        'http://localhost:8002/pipline/inspection/stake-numbers/search/?keyword=', '📍');
+        '/pipline/inspection/stake-numbers/search/?keyword=', 
+        '/pipline/inspection/stake-numbers/search/?keyword=', '📍');
     });
 
     function setupAutocomplete(inputId, suggestionBoxId, allUrl, searchUrl, icon) {
