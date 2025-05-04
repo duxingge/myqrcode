@@ -18,7 +18,7 @@ def createQrcode(request,pipeGroup,pipCode):
     data = settings.QRCODE_SHOW_HOST + pipCode + '/'
     ewm.add_data(data=data)
     ewm.make(fit=True)
-    ewm_img = ewm.make_image(fill_color="#000000", back_color="white")
+    ewm_img = ewm.make_image(fill_color="#000000", back_color="white").convert("RGB")
     
     # 获取二维码大小
     ewm_size_w, ewm_size_h = ewm_img.size

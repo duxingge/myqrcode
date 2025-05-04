@@ -25,6 +25,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 from pipline.models import PipelinesConifg
+from django import forms
+
+from pipline.models import UploadedFile  # 导入模型
 
 from pipService.qrutil import properties
 
@@ -35,6 +38,11 @@ def getPipdetails(request):
 
 def getPipdetailsByCode(request, code):
     return render(request, 'pipdetails.html',{"pipDetails": views.get_pipeline_data_by_code(request, code)})
+
+
+def getPipNavigateByCode(request, code):
+    return render(request, 'pipnavigate.html',{"pipDetails": views.get_pipeline_data_by_code(request, code)})
+
 
 @login_required
 def getPipdetailStrByCode(request, code):
@@ -121,7 +129,7 @@ def downloadAllQrcode(request):
 
 def uploadfile(request):
     if request.method == 'POST':
-        form = views.UploadFileForm(request.POST, request.FILES)
+        form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
 
             FILE_PATH = f'{settings.MEDIA_ROOT}/uploads/piplinedatas.xlsx'
@@ -135,7 +143,7 @@ def uploadfile(request):
             original_name = uploaded_file.name
             uploaded_file.name = 'piplinedatas.xlsx';
             # 将文件保存到数据库中
-            instance = views.UploadedFile(file=uploaded_file)
+            instance = UploadedFile(file=uploaded_file)
             instance.save()
             views.import_pipelines_data(request)
             createAllQrcode(request)
@@ -161,7 +169,7 @@ def uploadMediafile(request):
         original_name = uploaded_file.name
         uploaded_file.name = 'pipelinemedia.mp4'
         # 将文件保存到数据库中
-        instance = views.UploadedFile(file=uploaded_file)
+        instance = UploadedFile(file=uploaded_file)
         instance.save()
         return JsonResponse({'success': True, 'filename': f'视频 "{original_name}" 更新成功'})
     return JsonResponse({'success': False, 'filename': f'视频 "{original_name}" 更新失败'})
@@ -224,3 +232,7 @@ class PipelineListView(APIView):
 class PipelineHomeView(APIView):
     def get(self, request):
         return render(request, 'pipeHome.html')
+    
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()

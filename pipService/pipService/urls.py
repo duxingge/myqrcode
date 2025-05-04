@@ -36,6 +36,8 @@ urlpatterns = ([
     # path('pipline/infos/', pipdetails.getPipdetails),
     # 查看pip视图
     path('pipline/infos/<str:code>/', pipdetails.getPipdetailsByCode),
+    # 查看pip视图
+    path('pipline/infos/navigate/<str:code>/', pipdetails.getPipNavigateByCode),
     # 查询pip信息json
     path('pipline/info/str/<str:code>/', pipdetails.getPipdetailStrByCode),
     # 列表查询管理
