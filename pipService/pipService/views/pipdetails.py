@@ -218,3 +218,8 @@ class PipelineListView(APIView):
             'total_pages': paginator.page.paginator.num_pages,
             'searched_code': code,
         })
+
+@method_decorator(login_required, name='dispatch')
+class PipelineHomeView(APIView):
+    def get(self, request):
+        return render(request, 'pipeHome.html')

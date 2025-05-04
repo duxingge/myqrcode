@@ -23,7 +23,7 @@ from .views import pipdetails
 from pipline import views
 from django.conf.urls.static import static
 from django.conf import settings
-from .views.pipdetails import PipelineListView
+from .views.pipdetails import PipelineListView, PipelineHomeView
 from pipline.views import inspection_create, InspectionListView,  inspector_search_api, stake_number_search_api
 
 
@@ -39,7 +39,8 @@ urlpatterns = ([
     # 查询pip信息json
     path('pipline/info/str/<str:code>/', pipdetails.getPipdetailStrByCode),
     # 列表查询管理
-    path('pipline/manager/', PipelineListView.as_view(), name='pipeline_manager'),
+    path('pipline/manager/qrcode/', PipelineListView.as_view(), name='pipeline_manager'),
+    path('pipline/manager/', PipelineHomeView.as_view(), name='pipeline_manager'),
     path('pipline/create/qrcode/<str:code>/', pipdetails.createQrcode),
     path('pipline/create/all/qrcodes/', pipdetails.createAllQrcode),
     path('pipline/infos/download/code/<str:code>/', pipdetails.downloadQrcode),
