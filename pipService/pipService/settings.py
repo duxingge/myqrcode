@@ -86,7 +86,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': '/data/database/sqlite/pipline.sqlite3',
-        'NAME': '/Users/wangjiawang/work2/myqrcodedb/pipline.sqlite3',
+        # 'NAME': '/Users/wangjiawang/work2/myqrcodedb/pipline.sqlite3',
+        'NAME': '/Users/wangjiaxing/work/myqrcodedb/pipline.sqlite3',
+
 
     }
 }

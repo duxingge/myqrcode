@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/pipService/manage.py",
             "args": [
                 "runserver",
-                "0.0.0.0:8003"
+                "0.0.0.0:8002"
             ],
             "django": true,
             "autoStartBrowser": false
