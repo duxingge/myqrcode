@@ -115,14 +115,14 @@ class InspectionListView(ListView):
         # 按时间范围过滤
         if start_time:
             try:
-                start_date = timezone.make_aware(datetime.strptime(start_time, '%Y-%m-%d'))
+                start_date = timezone.make_aware(datetime.strptime(start_time, '%Y-%m-%dT%H:%M'))
                 filters &= Q(inspection_time__gte=start_date)
             except ValueError:
                 pass
                 
         if end_time:
             try:
-                end_date = timezone.make_aware(datetime.strptime(end_time, '%Y-%m-%d'))
+                end_date = timezone.make_aware(datetime.strptime(end_time, '%Y-%m-%dT%H:%M'))
                 end_date = end_date.replace(hour=23, minute=59, second=59)
                 filters &= Q(inspection_time__lte=end_date)
             except ValueError:

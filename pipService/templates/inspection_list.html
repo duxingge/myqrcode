@@ -289,12 +289,12 @@
 
       // 自动完成初始化
       setupAutocomplete('name', 'name-suggestions', 
-        'http://localhost:8003/pipline/inspection/inspector/search/', 
-        'http://localhost:8003/pipline/inspection/inspector/search/?keyword=', '👤');
+        'http://localhost:8002/pipline/inspection/inspector/search/', 
+        'http://localhost:8002/pipline/inspection/inspector/search/?keyword=', '👤');
 
       setupAutocomplete('pile', 'pile-suggestions', 
-        'http://localhost:8003/pipline/inspection/stake-numbers/search/?keyword=', 
-        'http://localhost:8003/pipline/inspection/stake-numbers/search/?keyword=', '📍');
+        'http://localhost:8002/pipline/inspection/stake-numbers/search/?keyword=', 
+        'http://localhost:8002/pipline/inspection/stake-numbers/search/?keyword=', '📍');
     });
 
     function setupAutocomplete(inputId, suggestionBoxId, allUrl, searchUrl, icon) {

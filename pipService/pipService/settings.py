@@ -153,3 +153,6 @@ QRCODE_EXECEL_PATH = f"{QRCODE_DATA}/excel"
 
 # QRCODE_SHOW_HOST = "http://101.201.173.95:8000/pipline/infos/"
 QRCODE_SHOW_HOST = "http://www.shanxiranqi.ltd/pipline/infos/"
+
+USE_TZ = True  # 默认是 True，确保它是 True
+TIME_ZONE = 'Asia/Shanghai'
