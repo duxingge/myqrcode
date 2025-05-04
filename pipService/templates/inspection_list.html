@@ -156,10 +156,10 @@
     <input type="text" id="pile" name="pile" autocomplete="off">
 
     <label for="start">开始时间：</label>
-    <input type="datetime-local" id="start" name="start">
+    <input type="datetime-local" id="start_time" name="start_time" value="start_time">
 
     <label for="end">结束时间：</label>
-    <input type="datetime-local" id="end" name="end">
+    <input type="datetime-local" id="end_time" name="end_time" value="end_time">
 
     <button type="submit">查询</button>
   </form>
@@ -279,13 +279,13 @@
     document.addEventListener('DOMContentLoaded', function() {
       const name = localStorage.getItem('name');
       const pile = localStorage.getItem('pile');
-      const start = localStorage.getItem('start');
-      const end = localStorage.getItem('end');
+      const start = localStorage.getItem('start_time');
+      const end = localStorage.getItem('end_time');
 
       if (name) document.getElementById('name').value = name;
       if (pile) document.getElementById('pile').value = pile;
-      if (start) document.getElementById('start').value = start;
-      if (end) document.getElementById('end').value = end;
+      if (start) document.getElementById('start_time').value = start;
+      if (end) document.getElementById('end_time').value = end;
 
       // 自动完成初始化
       setupAutocomplete('name', 'name-suggestions', 
