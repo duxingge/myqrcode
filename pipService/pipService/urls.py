@@ -37,11 +37,11 @@ urlpatterns = ([
     # 查看pip视图
     path('pipline/infos/<str:code>/', pipdetails.getPipdetailsByCode),
     # 查看pip视图
-    path('pipline/infos/navigate/<str:code>/', pipdetails.getPipNavigateByCode),
+    path('pipline/infos/navigate/<str:code>/', pipdetails.getPipNavigateByCode, name='pipeline_navigate'),
     # 查询pip信息json
     path('pipline/info/str/<str:code>/', pipdetails.getPipdetailStrByCode),
     # 列表查询管理
-    path('pipline/manager/qrcode/', PipelineListView.as_view(), name='pipeline_manager'),
+    path('pipline/manager/qrcode/', PipelineListView.as_view(), name='pipeline_manager_qrocode'),
     path('pipline/manager/', PipelineHomeView.as_view(), name='pipeline_manager'),
     path('pipline/create/qrcode/<str:code>/', pipdetails.createQrcode),
     path('pipline/create/all/qrcodes/', pipdetails.createAllQrcode),
