@@ -138,13 +138,14 @@
 <body>
 
 <div class="header">
-  <img src="http://www.shanxiranqi.ltd/static/shanxi_ranqi.png" alt="logo">
+  <img src="https://www.shanxiranqi.ltd/static/shanxi_ranqi.png" alt="logo">
   <div class="header-title">管道巡检信息</div>
 </div>
 
 <div class="form-section">
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    <input type="hidden" name="stake_number" id="stake_number" value="预设桩号名">
 
     <div class="form-group">
       <label>巡检结果 *</label>
@@ -167,7 +168,7 @@
 
     <div class="form-group">
       <label>位置信息 *</label>
-      <input type="text" id="location" name="location_info" placeholder="点击按钮获取当前位置" readonly>
+      <input type="text" id="location" name="location_info" placeholder="点击按钮获取当前位置" >
       <button type="button" class="get-location-btn" onclick="getLocation()">获取定位</button>
     </div>
 
@@ -180,6 +181,18 @@
 <img id="map-preview" src="" alt="地图预览" />
 
 <script>
+
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const stake = params.get('stake_number');
+    if (stake) {
+      document.getElementById('stake_number').value = stake;
+      console.log("桩号 stake_number 设置为:", stake);
+    } else {
+      console.warn("未获取到 stake_number 参数");
+    }
+  });
+
   function getLocation() {
     console.log("尝试定位...");
     if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
