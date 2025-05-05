@@ -1,1 +1,119 @@
-ttt
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>陕西燃气</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    .content {
+      position: relative;
+      width: 260px;
+      height: 400px;
+      background-color: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .content img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .text-overlay {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+    }
+
+    #stakeInfo {
+      top: 20%;
+      font-size: 16px;
+      color: black;
+    }
+
+    .button-overlay {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+    }
+
+    #btnInfo {
+      top: 45%;
+    }
+
+    #btnInspect {
+      top: 65%;
+    }
+
+    .nav-button {
+      padding: 10px 24px;
+      font-size: 20px;
+      border: 2px solid #28a745;
+      border-radius: 6px;
+      background-color: transparent;
+      color: #004085;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-button:hover {
+      background-color: rgba(40, 167, 69, 0.1);
+      border-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+<div class="content">
+  <img src="/static/pipe_back4.jpg" alt="陕西燃气logo">
+
+  <!-- 桩号 -->
+  <div class="text-overlay" id="stakeInfo">桩号: </div>
+
+  <!-- 按钮 -->
+  <div class="button-overlay" id="btnInfo">
+    <button class="nav-button" id="infoBtn">管道信息</button>
+  </div>
+  <div class="button-overlay" id="btnInspect">
+    <button class="nav-button" id="inspectBtn">管道巡检</button>
+  </div>
+</div>
+
+<script>
+  // 更加鲁棒地获取桩号（去除空字符串）
+  const pathSegments = window.location.pathname.split('/').filter(Boolean);
+  const stakeCode = decodeURIComponent(pathSegments[pathSegments.length - 1]);
+
+  // 显示桩号
+  document.getElementById('stakeInfo').textContent = '桩号: ' + stakeCode;
+
+  // 构造完整跳转路径
+  const baseURL = window.location.origin;
+  const infoURL = `${baseURL}/pipline/infos/${encodeURIComponent(stakeCode)}`;
+  const inspectURL = `${baseURL}/pipline/inspection/create`;
+
+  // 按钮绑定
+  document.getElementById('infoBtn').onclick = () => {
+    window.location.href = infoURL;
+  };
+  document.getElementById('inspectBtn').onclick = () => {
+    window.location.href = inspectURL;
+  };
+</script>
+
+</body>
+</html>
