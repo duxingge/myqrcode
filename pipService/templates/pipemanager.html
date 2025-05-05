@@ -286,11 +286,7 @@
       const pipeName = document.getElementById('pipeLine').value.trim();
       const errorDiv = document.getElementById('pipLineError');
 
-      if (!pipeName) {
-        event.preventDefault();
-        errorDiv.textContent = '请输入管线名称';
-        return;
-      }
+      
       errorDiv.textContent = '';
     }
 
