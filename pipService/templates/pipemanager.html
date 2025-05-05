@@ -1,370 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pipeline Manager</title>
-    <style>
-        body {
-            background-image:url('http://www.shanxiranqi.ltd/static/back1.jpg');
-            background-size:cover;
-            height:100vh;
-        }
-        .tab { display: none; }
-        .tabSelectContainer {
-            height: 50px;
-            width: 100%;
-            display: flex;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pipeline Manager</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-image: url('http://www.shanxiranqi.ltd/static/back1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+    }
 
-        .tab-button { 
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            background-color:transparent;
-            text-align: center;
-            cursor: pointer; 
-        }
+    h1 {
+      text-align: center;
+      color: #ffffff;
+      padding: 20px 0;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    }
 
-        .active { display: block; }
-        h1 {
-            text-align: center;
-        }
-        .content {
-            flex: 1;
-            overflow-y: auto;
-        }
-        .bottom-bar {
-            width: 100%;
-            height: 50px;
-            background-color: #f8f8f8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            bottom: 0;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-        }
+    .tabSelectContainer {
+      display: flex;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: 10px;
+      margin: 0 auto 10px;
+      width: 90%;
+      max-width: 800px;
+    }
 
-        .list {
-            padding: 0;
-            list-style-type: none;
-        }
-        .list-item {
-            margin-bottom: 8px; /* 垂直间距8dp */
-            padding-left: 5px;
-            padding-right:5px;
-        }
-        .file-name {
-            width: 400px; /* 固定宽度 */
-            overflow: hidden; /* 隐藏超出部分 */
-            text-overflow: ellipsis; /* 超出部分用省略号表示 */
-            white-space: nowrap; /* 不换行 */
-        }
-        .download-btn {
-            padding: 6px 12px; /* 按钮内边距 */
-            background-color: #007bff; /* 按钮背景颜色 */
-            color: white; /* 按钮文本颜色 */
-            border: none; /* 去掉边框 */
-            border-radius: 4px; /* 圆角 */
-            cursor: pointer; /* 鼠标悬停时变成手形 */
-        }
-        .download-btn:hover {
-            background-color: #0056b3; /* 悬停时更改背景颜色 */
-        }
+    .tab-button {
+      flex: 1;
+      padding: 10px 0;
+      font-size: 18px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+      text-decoration: none; /* 去除下划线 */
+    }
 
-        .search-btn {
-            padding: 6px 12px; /* 按钮内边距 */
-            background-color: #007bff; /* 按钮背景颜色 */
-            color: white; /* 按钮文本颜色 */
-            border: none; /* 去掉边框 */
-            border-radius: 4px; /* 圆角 */
-            cursor: pointer; /* 鼠标悬停时变成手形 */
-        }
-    </style>
+    .tab-button:hover {
+      color: #007bff;
+    }
+
+    .tab-button.active {
+      color: #007bff; /* 设置高亮文字颜色 */
+      font-weight: bold; /* 保持加粗文字 */
+    }
+
+    .content {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto 60px;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.85);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .tab {
+      display: none;
+    }
+
+    .tab.active {
+      display: block;
+    }
+
+    form {
+      margin: 10px 0 20px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="file"] {
+      padding: 6px 10px;
+      margin-right: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      width: 200px;
+    }
+
+    .download-btn,
+    .search-btn {
+      padding: 6px 14px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .download-btn:hover,
+    .search-btn:hover {
+      background-color: #0056b3;
+    }
+
+    ul.list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .list-item {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .file-name {
+      flex-grow: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 60px;
+      background-color: rgba(255, 255, 255, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .bottom-bar form,
+    .bottom-bar span,
+    .bottom-bar a {
+      margin: 0 10px;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+
+    .file-upload-form,
+    .file-upload-media {
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-    <h1 >管道信息管理</h1> 
-    
-    <!-- Tab Buttons -->
-    <div class="tabSelectContainer">
-        <button class="tab-button" onclick="showTab('pipeLineTab')">管道列表</button>
-        <button class="tab-button" onclick="showTab('upload')">上传文件</button>
+  <h1>管道信息管理</h1>
+
+  <div class="tabSelectContainer">
+    <button class="tab-button" onclick="showTab('pipeLineTab')" id="pipeLineButton">管道列表</button>
+    <button class="tab-button" onclick="showTab('upload')" id="uploadButton">上传文件</button>
+  </div>
+
+  <div class="content">
+    <div id="pipeLineTab" class="tab active">
+      <h2>管道列表</h2>
+      <form onsubmit="doSearch(event)">
+        <label>管线名称:</label>
+        <input list="pipeLineSuggestions" type="text" id="pipeLine" name="pipe_group" value="{{ pipe_group }}" />
+        <datalist id="pipeLineSuggestions">
+          <option value="宝汉线">
+          <option value="汉安线">
+          <option value="康汉线">
+          <option value="留凤线">
+          <option value="留坝支线">
+        </datalist>
+        <div id="pipLineError" class="error"></div>
+
+        <label>管道编号:</label>
+        <input type="text" id="code" name="code" value="{{ searched_code }}" />
+        <button class="search-btn" type="submit">搜索</button>
+      </form>
+
+      <h3>
+        管道信息
+        <button class="download-btn" onclick="downloadFiles()">下载所有查询结果</button>
+      </h3>
+      <ul class="list">
+        {% for pipeline in pipelines %}
+        <li class="list-item">
+          <span class="file-name">{{ pipeline.name }} - 管号: {{ pipeline.code }}</span>
+          <button class="download-btn" onclick="downloadFile('{{ pipeline.code }}')">下载</button>
+        </li>
+        {% empty %}
+        <li>未找到管道信息.</li>
+        {% endfor %}
+      </ul>
     </div>
 
-    <div class= "content">
-    <!-- Tab Contents -->
-        <div id="pipeLineTab" class="tab active">
-            <h2>管道列表</h2>
-        
-            <!-- 查询表单 -->
-            <form onsubmit="doSearch(event)" >
-                <label for="code">请输入管线名称:</label>
-                    <input list="pipeLineSuggestions" type="text" id="pipeLine" name="pipe_group" value="{{ pipe_group }}">
-                    <datalist id="pipeLineSuggestions">
-                        <option value="宝汉线">
-                        <option value="汉安线">
-                        <option value="康汉线">
-                        <option value="留凤线">
-                        <option value="留坝支线">
-                    </datalist>
-                    <div id="pipLineError" class="error"></div> <!-- 提示信息 -->
+    <div id="upload" class="tab">
+      <h2>上传管道信息</h2>
+      {% if message %}
+      <p>{{ message }}</p>
+      {% endif %}
 
-                <label for="code">请输入管道编号:</label>
-                    <input type="text" id="code" name="code" value="{{ searched_code }}">
-                
-                <button class="search-btn" type="submit">搜索</button>
-                
-            </form>
-
-            <h2>管道信息 <button class = "download-btn" onclick="downloadFiles()">下载所有查询结果</button> </h2>  
-        
-            <ul class="list">
-                {% for pipeline in pipelines %}
-                    <li class="list-item" id = "list" >
-                        <span class="file-name">
-                            {{ pipeline.name }} - 管号: {{ pipeline.code }}
-                        </span>  
-                        
-                        <button class = "download-btn" onclick="downloadFile('{{ pipeline.code }}')">
-                            下载
-                        </button> 
-                    </li>
-                {% empty %}
-                    <li>未找到管道信息.</li>
-                {% endfor %}
-            </ul>
-       
-            <div height="50px"></div> 
-            <!-- 分页 -->
-            <div class="bottom-bar">
-
-                {% if previous_page_url %}
-                    <a href="{{ previous_page_url }}">Previous</a>
-                {% endif %}
-                <span>第 {{ current_page }} 页，总共 {{ total_pages }}页</span>
-                {% if next_page_url %}
-                    <a href="{{ next_page_url }}">Next</a>
-                {% endif %}
-                <div width="10px"></div>
-                <form action="" method="get">
-                    <input type="hidden" name="code" value="{{ searched_code }}">
-                    <label for="page">页号:</label>
-                    <input type="number" id="page" name="page" value="{{ current_page }}" min="1" max="{{ total_pages }}">
-                    <button type="submit">前往</button>
-                </form>
-            </div>
+      <h3>上传管道表格:</h3>
+      <form id="uploadForm" action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
+        <div class="file-upload-form">
+          {% csrf_token %}
+          <input type="file" name="file" id="fileUploadForm" />
+          <button class="download-btn" type="submit">上传</button>
+          <div id="uploadFormResult"></div>
         </div>
+      </form>
 
-        <div id="upload" class="tab">
-            <h2>上传管道信息</h2>
-            {% if message %}
-                <p>{{ message }}</p>
-            {% endif %}
-            <h3>选择管道表格文件:</h3>
-            <form id = "uploadForm" action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
-                <div class="file-upload-form">
-                    {% csrf_token %}
-                    <input type="file" name="file" id="fileUploadForm">
-                    <button class="download-btn" type="submit">上传</button>
-                    <div id="uploadFormResult"></div>
-                </div>
-            </form>
-
-            <h3>选择管道宣传视频文件:</h3>
-            <form id="uploadMedia" action="{% url 'upload_media_file' %}" method="post" enctype="multipart/form-data">
-                <div class="file-upload-media">
-                    {% csrf_token %}
-                      <input type="file" name="mediaFile" id="fileUploadMedia">
-                      <button class="download-btn" type="submit">上传</button>
-                      <div id="uploadMediaResult"></div>
-                </div>
-                
-            </form>
+      <h3>上传宣传视频:</h3>
+      <form id="uploadMedia" action="{% url 'upload_media_file' %}" method="post" enctype="multipart/form-data">
+        <div class="file-upload-media">
+          {% csrf_token %}
+          <input type="file" name="mediaFile" id="fileUploadMedia" />
+          <button class="download-btn" type="submit">上传</button>
+          <div id="uploadMediaResult"></div>
         </div>
-
-       
+      </form>
     </div>
+  </div>
 
-    
+  <div class="bottom-bar">
+    {% if previous_page_url %}
+    <a href="{{ previous_page_url }}">上一页</a>
+    {% endif %}
+    <span>第 {{ current_page }} 页，共 {{ total_pages }} 页</span>
+    {% if next_page_url %}
+    <a href="{{ next_page_url }}">下一页</a>
+    {% endif %}
 
-    <script>
+    <form action="" method="get">
+      <input type="hidden" name="code" value="{{ searched_code }}" />
+      <label for="page">跳转页:</label>
+      <input type="number" id="page" name="page" value="{{ current_page }}" min="1" max="{{ total_pages }}" />
+      <button type="submit">前往</button>
+    </form>
+  </div>
 
+  <script>
+    function showTab(tabName) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      if (tabName === 'pipeLineTab') {
+        document.getElementById('pipeLineButton').classList.add('active');
+      } else if (tabName === 'upload') {
+        document.getElementById('uploadButton').classList.add('active');
+      }
+    }
 
-        function showTab(tabName) {
-            // Hide all tabs
-            var tabs = document.querySelectorAll('.tab');
-            tabs.forEach(function(tab) {
-                tab.classList.remove('active');
-            });
+    function getQueryParams() {
+      const params = {};
+      for (const [key, value] of new URLSearchParams(window.location.search)) {
+        params[key] = value;
+      }
+      return params;
+    }
 
-            // Show the selected tab
-            document.getElementById(tabName).classList.add('active');
-        }
+    function downloadFile(code) {
+      const url = "http://www.shanxiranqi.ltd/pipline/infos/download/code/" + code;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
 
-        function getQueryParams() {
-            const urlParams = new URLSearchParams(window.location.search); // 获取URL的查询参数
-            const params = {};
-            // 遍历所有的参数
-            for (const [key, value] of urlParams.entries()) {
-                params[key] = value; // 将参数键值对存入对象
-            }
+    function downloadFiles() {
+      const urlParamsString = window.location.search;
+      const downloadUrl = "http://www.shanxiranqi.ltd/pipline/infos/download/all/" + urlParamsString;
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = '';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
 
-            return params;
-        }
+    function doSearch(event) {
+      const code = document.getElementById('code').value.trim();
+      const pipeName = document.getElementById('pipeLine').value.trim();
+      const errorDiv = document.getElementById('pipLineError');
 
+      if (!pipeName) {
+        event.preventDefault();
+        errorDiv.textContent = '请输入管线名称';
+        return;
+      }
+      errorDiv.textContent = '';
+    }
 
-        function downloadFile(code) {
-            const params = getQueryParams(); // 获取参数
+    function updateData() {
+      const params = getQueryParams();
+      document.getElementById('code').value = params['code'] || '';
+      document.getElementById('pipeLine').value = params['pipe_group'] || '';
+    }
 
-            const singleFileDownloadUrl = "http://www.shanxiranqi.ltd/pipline/infos/download/code/" + code
+    window.onload = function() {
+      showTab('pipeLineTab'); // 默认显示管道列表
+      updateData();
+    }
 
-            const a = document.createElement('a');
-            a.href = singleFileDownloadUrl;
-            a.download = ''; // 设置为下载模式，文件名可以留空
-            document.body.appendChild(a); // 将元素添加到文档
-            a.click(); // 触发点击事件
-            document.body.removeChild(a); // 点击后移除元素
-        }
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const fileInput = document.getElementById('fileUploadForm');
+      if (fileInput.files.length === 0) return alert('请选择文件');
 
-        function downloadFiles() {
-            const urlParamsString = window.location.search
-            console.log(`${urlParamsString}`)
-            
-            
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
 
-            const downloadUrl = "http://www.shanxiranqi.ltd/pipline/infos/download/all/" + urlParamsString
-            console.log(`${downloadUrl}`)
+      fetch(event.target.action, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('uploadFormResult').textContent = data.success ? `上传成功: ${data.filename}` : `上传失败: ${data.error}`;
+      })
+      .catch(() => {
+        document.getElementById('uploadFormResult').textContent = '上传失败';
+      });
+    });
 
-             // 创建一个临时的<a>元素
-            const a = document.createElement('a');
-            a.href = downloadUrl;
-            a.download = ''; // 设置为下载模式，文件名可以留空
-            document.body.appendChild(a); // 将元素添加到文档
-            a.click(); // 触发点击事件
-            document.body.removeChild(a); // 点击后移除元素
+    document.getElementById('uploadMedia').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const fileInput = document.getElementById('fileUploadMedia');
+      if (fileInput.files.length === 0) return alert('请选择文件');
 
-        }
+      const formData = new FormData();
+      formData.append('mediaFile', fileInput.files[0]);
 
-        function doSearch(event) {
-           
-           
-            const codeField = document.getElementById('code');
-            const code = codeField.value.trim(); // 获取输入框的值并去除空
-
-            const pipleLineField = document.getElementById('pipeLine');
-            const pipleLineName = pipleLineField.value.trim(); // 获取输入框的值并去除空
-        
-            if(code === '') {
-                //ignore
-                return
-            } 
-            const errorMessage = document.getElementById('pipLineError'); 
-
-            if (pipleLineName === '') {
-                event.preventDefault(); // 阻止表单提交
-                pipleLineField.focus(); // 将焦点移到输入框
-                errorMessage.innerText = '输入不能为空！'; // 显示错误提示
-            } else {
-                // 输入框不为空，继续执行
-                errorMessage.innerText = ''; // 清空提示
-              
-            } 
-
-        }
-
-        function updateData() {
-            const params = getQueryParams(); // 获取参数
-            const codeField = document.getElementById('code');
-            const pipleLineField = document.getElementById('pipeLine');
-
-            console.log(`params:${params}`)
-            // 检查是否存在名为 'inputValue' 的参数
-            const code = params['code'];
-            const pipleLineDesc = params['pipe_group'];
-
-            console.log(`code:${code}, pipeLine:${pipleLineDesc}`)
-            if(code) {
-                codeField.value = code;
-            } else {
-                codeField.value = '';
-            }
-     
-    
-            if(pipleLineDesc) {
-                pipleLineField.value = pipleLineDesc;
-            } else {
-                pipleLineField.value = '';
-            }
-        
-        }
-
-        window.onload = updateData()
-
-        document.getElementById('uploadForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // 阻止默认表单提交行为
-
-            const fileInput = document.getElementById('fileUploadForm');
-            if (fileInput.files.length === 0) {
-                alert('请选择文件');
-            } else {
-                const formData = new FormData();
-                formData.append('file', fileInput.files[0]);
-
-                fetch(event.target.action, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('uploadFormResult').textContent = '上传成功: ' + data.filename;
-                    } else {
-                        document.getElementById('uploadFormResult').textContent = '上传失败: ' + data.error;
-                    }
-                })
-                .catch(error => {
-                    console.error('上传过程中出现错误:', error);
-                    document.getElementById('uploadFormResult').textContent = '上传失败11';
-                });
-            }
-        });
-
-        document.getElementById('uploadMedia').addEventListener('submit', function(event) {
-            event.preventDefault(); // 阻止默认表单提交行为
-
-            const fileInput = document.getElementById('fileUploadMedia');
-            if (fileInput.files.length === 0) {
-                alert('请选择文件');
-            } else {
-                const formData = new FormData();
-                formData.append('mediaFile', fileInput.files[0]);
-
-                fetch(event.target.action, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('uploadMediaResult').textContent = '上传成功: ' + data.filename;
-                    } else {
-                        document.getElementById('uploadMediaResult').textContent = '上传失败: ' + data.error;
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('uploadMediaResult').textContent = '上传失败';
-                });
-            }
-        });
-    </script>
+      fetch(event.target.action, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('uploadMediaResult').textContent = data.success ? `上传成功: ${data.filename}` : `上传失败: ${data.error}`;
+      })
+      .catch(() => {
+        document.getElementById('uploadMediaResult').textContent = '上传失败';
+      });
+    });
+  </script>
 </body>
 </html>
