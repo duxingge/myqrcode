@@ -42,7 +42,7 @@
       cursor: pointer;
       font-weight: bold;
       color: #333;
-      text-decoration: none; /* 去除下划线 */
+      text-decoration: none;
     }
 
     .tab-button:hover {
@@ -50,8 +50,8 @@
     }
 
     .tab-button.active {
-      color: #007bff; /* 设置高亮文字颜色 */
-      font-weight: bold; /* 保持加粗文字 */
+      color: #007bff;
+      font-weight: bold;
     }
 
     .content {
@@ -132,12 +132,67 @@
       justify-content: center;
       align-items: center;
       box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+      padding: 0 10px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .bottom-bar form,
     .bottom-bar span,
     .bottom-bar a {
       margin: 0 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .bottom-bar input[type="number"] {
+      width: 60px;
+      padding: 4px;
+      margin: 0 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .bottom-bar button {
+      padding: 4px 10px;
+      margin-left: 5px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .bottom-bar button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      .bottom-bar {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 0;
+        gap: 8px;
+      }
+
+      .bottom-bar form {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .bottom-bar input[type="number"] {
+        width: 100px;
+        margin: 5px 0;
+      }
+
+      .bottom-bar a,
+      .bottom-bar span {
+        font-size: 14px;
+      }
+
+      .bottom-bar button {
+        width: auto;
+      }
     }
 
     .error {
@@ -245,10 +300,13 @@
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
       document.getElementById(tabName).classList.add('active');
+
       if (tabName === 'pipeLineTab') {
         document.getElementById('pipeLineButton').classList.add('active');
+        document.querySelector('.bottom-bar').style.display = 'flex';
       } else if (tabName === 'upload') {
         document.getElementById('uploadButton').classList.add('active');
+        document.querySelector('.bottom-bar').style.display = 'none';
       }
     }
 
@@ -285,8 +343,6 @@
       const code = document.getElementById('code').value.trim();
       const pipeName = document.getElementById('pipeLine').value.trim();
       const errorDiv = document.getElementById('pipLineError');
-
-      
       errorDiv.textContent = '';
     }
 
@@ -297,7 +353,7 @@
     }
 
     window.onload = function() {
-      showTab('pipeLineTab'); // 默认显示管道列表
+      showTab('pipeLineTab');
       updateData();
     }
 
