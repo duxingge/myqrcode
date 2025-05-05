@@ -12,7 +12,9 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('pipeline_manager')  # 登录成功后重定向
+            # 获取next参数，如果没有则默认为'pipeline_manager'
+            next_url = request.POST.get('next', 'pipeline_manager')
+            return redirect(next_url)
         else:
             error_message = "Invalid credentials"
             return render(request, 'login.html', {'error_message': error_message})
