@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>管道巡检信息</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ✅ 正确引入百度地图 WebGL SDK -->
+  <script src="https://api.map.baidu.com/api?v=3.0&ak=6FNB6UZDgJ9OlPSsPe9E4oopNvP9Saaj"></script>
+
   <style>
     * { box-sizing: border-box; }
 
@@ -153,6 +157,11 @@
     </div>
 
     <div class="form-group">
+      <label>手机号</label>
+      <p>{{ request.user.phone }}</p>
+    </div>
+
+    <div class="form-group">
       <label>巡检结果 *</label>
       <div class="radio-group">
         <label><input type="radio" name="inspection_result" value="normal">正常</label>
@@ -173,7 +182,7 @@
 
     <div class="form-group">
       <label>位置信息 *</label>
-      <input type="text" id="location" name="location_info" placeholder="点击按钮获取当前位置" >
+      <input type="text" id="location" name="location_info" placeholder="点击按钮获取当前位置" readonly>
       <button type="button" class="get-location-btn" onclick="getLocation()">获取定位</button>
     </div>
 
@@ -186,46 +195,38 @@
 <img id="map-preview" src="" alt="地图预览" />
 
 <script>
-src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=6FNB6UZDgJ9OlPSsPe9E4oopNvP9Saaj"
-
-window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const stake = params.get('stake_number');
     if (stake) {
       document.getElementById('stake_number').value = stake;
       console.log("桩号 stake_number 设置为:", stake);
-    } else {
-      console.warn("未获取到 stake_number 参数");
     }
   });
 
   function getLocation() {
-    if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-      alert("定位功能只能在 HTTPS 页面或 localhost 上使用");
-      return;
-    }
+    const input = document.getElementById('location');
+    input.value = "定位中...";
 
-    const geolocation = new BMapGL.Geolocation();
-
+    const geolocation = new BMap.Geolocation();  // ✅ 改为 BMap
     geolocation.getCurrentPosition(function(position) {
       if (this.getStatus() === BMAP_STATUS_SUCCESS) {
         const lat = position.point.lat.toFixed(6);
         const lon = position.point.lng.toFixed(6);
-        const accuracy = position.accuracy;  // 米
-
-        document.getElementById('location').value = `${lat}, ${lon}（±${Math.round(accuracy)} 米）`;
-
+        const accuracy = position.accuracy;
+        input.value = `${lat}, ${lon}（±${Math.round(accuracy)} 米）`;
         showMapPreview(lat, lon);
-        console.log("定位成功：", lat, lon, "精度：", accuracy);
+        console.log("定位成功：", lat, lon);
       } else {
-        alert('定位失败：' + this.getStatus());
+        input.value = "";
+        alert("定位失败：" + this.getStatus());
         console.error("定位失败状态码：", this.getStatus());
       }
     }, { enableHighAccuracy: true });
   }
 
   function showMapPreview(lat, lon) {
-    const ak = '6FNB6UZDgJ9OlPSsPe9E4oopNvP9Saaj'; // 替换为你的百度地图 AK
+    const ak = '6FNB6UZDgJ9OlPSsPe9E4oopNvP9Saaj';
     const mapImg = document.getElementById('map-preview');
     const url = `https://api.map.baidu.com/staticimage/v2?ak=${ak}&center=${lon},${lat}&width=400&height=300&zoom=17&markers=${lon},${lat}`;
     mapImg.src = url;
@@ -240,7 +241,7 @@ window.addEventListener('DOMContentLoaded', () => {
       reader.onload = function(e) {
         preview.src = e.target.result;
         preview.style.display = 'block';
-      }
+      };
       reader.readAsDataURL(file);
     } else {
       preview.src = '';
