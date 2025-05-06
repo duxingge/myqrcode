@@ -148,6 +148,11 @@
     <input type="hidden" name="stake_number" id="stake_number" value="预设桩号名">
 
     <div class="form-group">
+      <label>巡检员</label>
+      <p>{{ request.user }}</p>
+    </div>
+
+    <div class="form-group">
       <label>巡检结果 *</label>
       <div class="radio-group">
         <label><input type="radio" name="inspection_result" value="normal">正常</label>
@@ -181,6 +186,7 @@
 <img id="map-preview" src="" alt="地图预览" />
 
 <script>
+src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=6FNB6UZDgJ9OlPSsPe9E4oopNvP9Saaj"
 
 window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
@@ -194,38 +200,32 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   function getLocation() {
-    console.log("尝试定位...");
     if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
       alert("定位功能只能在 HTTPS 页面或 localhost 上使用");
       return;
     }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          const lat = position.coords.latitude.toFixed(6);
-          const lon = position.coords.longitude.toFixed(6);
-          document.getElementById('location').value = `${lat}, ${lon}`;
-          showMapPreview(lat, lon);
-          console.log("定位成功", lat, lon);
-        },
-        function(error) {
-          console.error("定位失败", error);
-          if (error.code === error.PERMISSION_DENIED) {
-            alert("定位权限被拒绝，请在浏览器或系统设置中允许定位权限");
-          } else {
-            alert("获取位置失败：" + error.message);
-          }
-        },
-        { timeout: 10000, enableHighAccuracy: true }
-      );
-    } else {
-      alert("浏览器不支持定位功能");
-    }
+    const geolocation = new BMapGL.Geolocation();
+
+    geolocation.getCurrentPosition(function(position) {
+      if (this.getStatus() === BMAP_STATUS_SUCCESS) {
+        const lat = position.point.lat.toFixed(6);
+        const lon = position.point.lng.toFixed(6);
+        const accuracy = position.accuracy;  // 米
+
+        document.getElementById('location').value = `${lat}, ${lon}（±${Math.round(accuracy)} 米）`;
+
+        showMapPreview(lat, lon);
+        console.log("定位成功：", lat, lon, "精度：", accuracy);
+      } else {
+        alert('定位失败：' + this.getStatus());
+        console.error("定位失败状态码：", this.getStatus());
+      }
+    }, { enableHighAccuracy: true });
   }
 
   function showMapPreview(lat, lon) {
-    const ak = '6FNB6UZDgJ9OlPSsPe9E4oopNvP9Saaj'; // 替换为您的百度地图 AK
+    const ak = '6FNB6UZDgJ9OlPSsPe9E4oopNvP9Saaj'; // 替换为你的百度地图 AK
     const mapImg = document.getElementById('map-preview');
     const url = `https://api.map.baidu.com/staticimage/v2?ak=${ak}&center=${lon},${lat}&width=400&height=300&zoom=17&markers=${lon},${lat}`;
     mapImg.src = url;
