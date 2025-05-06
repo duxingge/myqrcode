@@ -5,6 +5,7 @@ from django.db import models
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 import os
 
@@ -49,7 +50,7 @@ class InspectionRecord(models.Model):
         ('abnormal', '异常'),
     ]
     
-    inspector = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="巡检人")
+    inspector = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="巡检人")
     stake_number = models.CharField(max_length=100, verbose_name="桩号")
     inspection_result = models.CharField(
         max_length=10, 
@@ -67,3 +68,11 @@ class InspectionRecord(models.Model):
     class Meta:
         verbose_name = "巡检记录"
         verbose_name_plural = "巡检记录"
+
+
+class CustomUser(AbstractUser):
+    phone = models.CharField(max_length=15, blank=True, null=True, verbose_name='手机号')
+    
+    class Meta:
+        verbose_name = '用户'
+        verbose_name_plural = verbose_name

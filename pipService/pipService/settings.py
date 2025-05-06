@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pipline',
+    'pipline.apps.PiplineConfig',
     'rest_framework'
 ]
 
@@ -85,9 +85,9 @@ WSGI_APPLICATION = 'pipService.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': '/data/database/sqlite/pipline.sqlite3',
+        'NAME': '/data/database/sqlite/pipline.sqlite3',
         # 'NAME': '/Users/wangjiawang/work2/myqrcodedb/pipline.sqlite3',
-        'NAME': '/Users/wangjiaxing/work/myqrcodedb/pipline.sqlite3',
+        # 'NAME': '/Users/wangjiaxing/work/myqrcodedb/pipline.sqlite3',
 
 
     }
@@ -147,15 +147,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 QRCODE_PIC_PREFIX = "QRCODE_PIC_"
 
 
-QRCODE_DATA= "/Users/wangjiaxing/work/myqrcode/pipService/data/"
-# QRCODE_DATA= "/data/qrcodedata"
+# QRCODE_DATA= "/Users/wangjiaxing/work/myqrcode/pipService/data/"
+QRCODE_DATA= "/data/qrcodedata"
 
 QRCODE_PIC_RESULT_PATH = f"{QRCODE_DATA}/qrcoderes"
 
 QRCODE_EXECEL_PATH = f"{QRCODE_DATA}/excel"
 
 # QRCODE_SHOW_HOST = "http://101.201.173.95:8000/pipline/infos/"
-QRCODE_SHOW_HOST = "http://www.shanxiranqi.ltd/pipline/infos//navigate/"
+QRCODE_SHOW_HOST = "https://www.shanxiranqi.ltd/pipline/infos//navigate/"
 
 USE_TZ = True  # 默认是 True，确保它是 True
 TIME_ZONE = 'Asia/Shanghai'
+
+AUTH_USER_MODEL = 'pipline.CustomUser'

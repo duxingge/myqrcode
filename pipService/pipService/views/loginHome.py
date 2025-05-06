@@ -13,7 +13,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             # 获取next参数，如果没有则默认为'pipeline_manager'
-            next_url = request.GET.get('next', 'pipeline_manager111')
+            next_url = request.GET.get('next', 'pipeline_manager')
             return redirect(next_url)
         else:
             error_message = "Invalid credentials"

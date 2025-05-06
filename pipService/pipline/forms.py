@@ -3,6 +3,7 @@ from .models import InspectionRecord
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from .models import CustomUser
 
 
 class UploadFileForm(forms.Form):
@@ -20,8 +21,9 @@ class InspectionRecordForm(forms.ModelForm):
         }
 
 class RegisterForm(UserCreationForm):
+    phone = forms.CharField(max_length=15, required=True, help_text='请输入手机号')
     
     class Meta:
-        model = User
-        fields = ("username", "password1", "password2")
+        model = CustomUser
+        fields = ("username", "phone", "password1", "password2")
     

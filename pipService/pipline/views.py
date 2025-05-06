@@ -170,7 +170,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # 注册后自动登录
-            return redirect('../pipline/manager/')  # 重定向到首页
+            return redirect('../manager/')  # 重定向到首页
     else:
         form = RegisterForm()
     
