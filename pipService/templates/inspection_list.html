@@ -143,6 +143,21 @@
     .suggestion-box span.icon {
       margin-right: 8px;
     }
+
+    .btn-delete {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
   </style>
 </head>
 <body>
@@ -256,18 +271,12 @@
       <td>${record.time}</td>
       <td>${record.location}</td>
       <td>${locationImage}</td>
+      <td>
+        <button class="btn-delete" onclick="deleteRecord(${record.id})" title="删除记录">
+          删除
+        </button>
+      </td>
     `;
-
-     // 添加删除按钮单元格
-     const deleteCell = document.createElement('td');
-     deleteCell.innerHTML = `
-       <button class="delete-btn" onclick="deleteRecord(${record.id})" 
-               style="background-color: #dc3545; color: white; border: none; 
-                      padding: 5px 10px; border-radius: 4px; cursor: pointer;">
-         删除
-       </button>
-     `;
-     tr.appendChild(deleteCell);
 
     tbody.appendChild(tr);
   });
