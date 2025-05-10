@@ -178,9 +178,6 @@
         <th>巡检时间</th>
         <th>位置信息</th>
         <th>位置图片</th>
-      </tr>
-      <tr>
-        <!-- 其他列... -->
         <th>操作</th>
       </tr>
     </thead>
@@ -205,7 +202,7 @@
     const rowsPerPage = 6;
     let currentPage = 1;
 
-    const records = [
+    let records = [
       {% for record in records %}
       {
         id: {{ record.id }},  // 添加ID字段
@@ -371,7 +368,7 @@ function getCookie(name) {
       if (end) document.getElementById('end_time').value = end;
 
       // 自动完成初始化
-      setupAutocomplete('inspector', 'name-suggestions', 
+      setupAutocomplete('inspector', 'inspector-suggestions', 
         '/pipline/inspection/inspector/search/', 
         '/pipline/inspection/inspector/search/?keyword=', '👤');
 
