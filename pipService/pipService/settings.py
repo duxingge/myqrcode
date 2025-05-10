@@ -85,9 +85,9 @@ WSGI_APPLICATION = 'pipService.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': '/data/database/sqlite/pipline.sqlite3',
+        'NAME': '/data/database/sqlite/pipline.sqlite3',
         # 'NAME': '/Users/wangjiawang/work2/myqrcodedb/pipline.sqlite3',
-        'NAME': '/Users/wangjiaxing/work/myqrcodedb/pipline.sqlite3',
+        # 'NAME': '/Users/wangjiaxing/work/myqrcodedb/pipline.sqlite3',
 
 
     }
@@ -147,8 +147,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 QRCODE_PIC_PREFIX = "QRCODE_PIC_"
 
 
-QRCODE_DATA= "/Users/wangjiaxing/work/myqrcode/pipService/data/"
-# QRCODE_DATA= "/data/qrcodedata"
+# QRCODE_DATA= "/Users/wangjiaxing/work/myqrcode/pipService/data/"
+QRCODE_DATA= "/data/qrcodedata"
 
 QRCODE_PIC_RESULT_PATH = f"{QRCODE_DATA}/qrcoderes"
 
