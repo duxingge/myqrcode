@@ -77,7 +77,6 @@ def inspection_create(request):
         form = InspectionRecordForm(request.POST, request.FILES)
         if form.is_valid():
             record = form.save(commit=False)
-            record.inspector = request.user
             record.save()
             return HttpResponse("提交成功")
         else:
