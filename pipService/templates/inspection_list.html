@@ -179,6 +179,10 @@
         <th>位置信息</th>
         <th>位置图片</th>
       </tr>
+      <tr>
+        <!-- 其他列... -->
+        <th>操作</th>
+      </tr>
     </thead>
     <tbody id="table-body">
       <!-- JS 渲染内容 -->
@@ -204,6 +208,7 @@
     const records = [
       {% for record in records %}
       {
+        id: {{ record.id }},  // 添加ID字段
         inspector: "{{ record.inspector|escapejs }}",
         phone: "{{ record.phone }}",
         stake: "{{ record.stake_number }}",
@@ -255,11 +260,66 @@
       <td>${record.location}</td>
       <td>${locationImage}</td>
     `;
+
+     // 添加删除按钮单元格
+     const deleteCell = document.createElement('td');
+     deleteCell.innerHTML = `
+       <button class="delete-btn" onclick="deleteRecord(${record.id})" 
+               style="background-color: #dc3545; color: white; border: none; 
+                      padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+         删除
+       </button>
+     `;
+     tr.appendChild(deleteCell);
+
     tbody.appendChild(tr);
   });
 
   document.getElementById('page-info').textContent = `第 ${currentPage} 页`;
 }
+
+function deleteRecord(recordId) {
+  if (confirm('确定要删除这条巡检记录吗？')) {
+    fetch(`/pipline/inspection/delete/${recordId}/`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        // 从本地数据中移除已删除的记录
+        records = records.filter(record => record.id !== recordId);
+        // 重新渲染表格
+        renderTable();
+        alert('删除成功');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('删除失败');
+    });
+  }
+}
+
+// 获取CSRF token的函数
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
 
     function nextPage() {
       if (currentPage < totalPages) {

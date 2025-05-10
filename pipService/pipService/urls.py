@@ -62,12 +62,15 @@ urlpatterns = ([
     path('pipline/properties/update/', pipdetails.setproerties, name='setproerties'),
     # 巡检创建
     path('pipline/inspection/create/', inspection_create, name='inspection_create'),
+    path('pipline/inspection/delete/<int:record_id>/', views.delete_inspection_record, name='delete_record'),
+
     # 巡检记录列表
     path('pipline/manager/list/', InspectionListView.as_view(), name='inspection_list'),
     # 注册
     path('pipline/register/', views.register_view, name='register'),
     # 巡检人列表
     path('pipline/inspection/inspector/search/', inspector_search_api, name='inspector-search'),
+
     # 巡检记录搜索
     path('pipline/inspection/stake-numbers/search/', stake_number_search_api, name='stake-number-search'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

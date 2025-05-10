@@ -26,6 +26,7 @@ from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import get_object_or_404
 
 
 
@@ -178,3 +179,10 @@ def register_view(request):
         form = RegisterForm()
     
     return render(request, 'registration/register.html', {'form': form})
+
+def delete_inspection_record(request, record_id):
+    if request.method == 'DELETE':
+        record = get_object_or_404(InspectionRecord, id=record_id)
+        record.delete()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'}, status=400)
