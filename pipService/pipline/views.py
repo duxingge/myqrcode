@@ -25,6 +25,7 @@ from django.views.decorators.http import require_GET
 from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.contrib.auth.decorators import user_passes_test
 
 
 
@@ -78,7 +79,7 @@ def inspection_create(request):
             record = form.save(commit=False)
             record.inspector = request.user
             record.save()
-            return redirect('inspection_list')
+            return HttpResponse("提交成功")
         else:
             print(form.errors)  # 打印错误信息
     else:
@@ -163,7 +164,10 @@ def stake_number_search_api(request):
     
     return JsonResponse(list(stake_numbers), safe=False)
 
+def is_superuser(user):
+    return user.is_authenticated and user.is_superuser
 
+@user_passes_test(is_superuser, login_url='/accounts/login')
 def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
