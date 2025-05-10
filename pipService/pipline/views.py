@@ -71,7 +71,6 @@ def get_pipeline_data_by_code(request, qCode):
     pip = Pipelines.objects.filter(code=qCode)[0]
     return pip
 
-@login_required
 def inspection_create(request):
     if request.method == 'POST':
         form = InspectionRecordForm(request.POST, request.FILES)
@@ -107,7 +106,7 @@ class InspectionListView(ListView):
         
         # 按姓名过滤
         if name:
-            filters &= Q(inspector__username__icontains=name)
+            filters &= Q(inspector__icontains=name)
             
         # 按桩号过滤
         if stake_number:

@@ -16,7 +16,7 @@ class UploadFileForm(forms.Form):
 class InspectionRecordForm(forms.ModelForm):
     class Meta:
         model = InspectionRecord
-        fields = ['stake_number', 'inspection_result', 'abnormal_record', 'photo', 'location_info']
+        fields = ['inspector','phone','stake_number', 'inspection_result', 'abnormal_record', 'photo', 'location_info']
         widgets = {
             'inspection_result': forms.RadioSelect,
         }

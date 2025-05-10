@@ -149,8 +149,8 @@
   <h1 >巡检记录报表</h1> 
 
   <form id="searchForm" onsubmit="handleSearch(event)">
-    <label for="name">姓名：</label>
-    <input type="text" id="name" name="name" autocomplete="off">
+    <label for="inspector">姓名：</label>
+    <input type="text" id="inspector" name="inspector" autocomplete="off">
 
     <label for="pile">桩号：</label>
     <input type="text" id="pile" name="pile" autocomplete="off">
@@ -193,7 +193,7 @@
     <button onclick="nextPage()">下一页</button>
   </div>
 
-  <div id="name-suggestions" class="suggestion-box"></div>
+  <div id="inspector-suggestions" class="suggestion-box"></div>
   <div id="pile-suggestions" class="suggestion-box"></div>
 
   <script>
@@ -204,8 +204,8 @@
     const records = [
       {% for record in records %}
       {
-        name: "{{ record.inspector.username|escapejs }}",
-        phone: "{{ request.user.phone }}",
+        inspector: "{{ record.inspector|escapejs }}",
+        phone: "{{ record.phone }}",
         stake: "{{ record.stake_number }}",
         result: "{{ record.get_inspection_result_display|escapejs }}",
         exception: "{{ record.abnormal_record|default:'无'|escapejs }}",
@@ -245,7 +245,7 @@
     }
 
     tr.innerHTML = `
-      <td>${record.name}</td>
+      <td>${record.inspector}</td>
       <td>${record.phone}</td>
       <td>${record.stake}</td>
       <td>${record.result}</td>
@@ -300,18 +300,18 @@
 
     // 页面加载时，填充表单字段
     document.addEventListener('DOMContentLoaded', function() {
-      const name = localStorage.getItem('name');
+      const inspector = localStorage.getItem('inspector');
       const pile = localStorage.getItem('pile');
       const start = localStorage.getItem('start_time');
       const end = localStorage.getItem('end_time');
 
-      if (name) document.getElementById('name').value = name;
+      if (inspector) document.getElementById('inspector').value = inspector;
       if (pile) document.getElementById('pile').value = pile;
       if (start) document.getElementById('start_time').value = start;
       if (end) document.getElementById('end_time').value = end;
 
       // 自动完成初始化
-      setupAutocomplete('name', 'name-suggestions', 
+      setupAutocomplete('inspector', 'name-suggestions', 
         '/pipline/inspection/inspector/search/', 
         '/pipline/inspection/inspector/search/?keyword=', '👤');
 
