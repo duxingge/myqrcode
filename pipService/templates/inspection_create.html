@@ -214,7 +214,7 @@
         const lat = position.point.lat.toFixed(6);
         const lon = position.point.lng.toFixed(6);
         const accuracy = position.accuracy;
-        input.value = `${lat}, ${lon}（±${Math.round(accuracy)} 米）`;
+        input.value = `${lat}, ${lon}`;
         showMapPreview(lat, lon);
         console.log("定位成功：", lat, lon);
       } else {

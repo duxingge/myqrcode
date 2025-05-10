@@ -170,12 +170,14 @@
     <thead>
       <tr>
         <th>姓名</th>
+        <th>手机号</th>
         <th>桩号</th>
         <th>巡检记录</th>
         <th>异常记录</th>
         <th>现场照片</th>
         <th>巡检时间</th>
         <th>位置信息</th>
+        <th>位置图片</th>
       </tr>
     </thead>
     <tbody id="table-body">
@@ -203,6 +205,7 @@
       {% for record in records %}
       {
         name: "{{ record.inspector.username|escapejs }}",
+        phone: "{{ request.user.phone }}",
         stake: "{{ record.stake_number }}",
         result: "{{ record.get_inspection_result_display|escapejs }}",
         exception: "{{ record.abnormal_record|default:'无'|escapejs }}",
@@ -216,30 +219,47 @@
     const totalPages = Math.ceil(records.length / rowsPerPage);
 
     function renderTable() {
-      const tbody = document.getElementById('table-body');
-      tbody.innerHTML = '';
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = '';
 
-      const start = (currentPage - 1) * rowsPerPage;
-      const end = start + rowsPerPage;
-      const paginatedRecords = records.slice(start, end);
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const paginatedRecords = records.slice(start, end);
 
-      paginatedRecords.forEach(record => {
-        const tr = document.createElement('tr');
+  paginatedRecords.forEach(record => {
+    const tr = document.createElement('tr');
 
-        tr.innerHTML = `
-          <td>${record.name}</td>
-          <td>${record.stake}</td>
-          <td>${record.result}</td>
-          <td>${record.exception || '无'}</td>
-          <td>${record.photo ? '<img src="'+record.photo+'" width="100">' : '无照片'}</td>
-          <td>${record.time}</td>
-          <td>${record.location}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+    // 生成百度地图静态图
+    let locationImage = '无定位';
+    if (record.location && record.location.includes(',')) {
+      const [lat, lng] = record.location.split(',').map(s => s.trim());
+      const zoom = 18;
+      const width = 200;
+      const height = 100;
+      const ak = '6FNB6UZDgJ9OlPSsPe9E4oopNvP9Saaj';  // 🔁 替换为你的百度地图密钥
 
-      document.getElementById('page-info').textContent = `第 ${currentPage} 页`;
+      locationImage = `
+        <img src="https://api.map.baidu.com/staticimage/v2?ak=${ak}&center=${lng},${lat}&width=${width}&height=${height}&zoom=${zoom}" 
+             alt="位置图" style="border-radius:4px;">
+      `;
     }
+
+    tr.innerHTML = `
+      <td>${record.name}</td>
+      <td>${record.phone}</td>
+      <td>${record.stake}</td>
+      <td>${record.result}</td>
+      <td>${record.exception || '无'}</td>
+      <td>${record.photo ? '<img src="' + record.photo + '" width="100">' : '无照片'}</td>
+      <td>${record.time}</td>
+      <td>${record.location}</td>
+      <td>${locationImage}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('page-info').textContent = `第 ${currentPage} 页`;
+}
 
     function nextPage() {
       if (currentPage < totalPages) {
