@@ -193,7 +193,9 @@
         <th>巡检时间</th>
         <th>位置信息</th>
         <th>位置图片</th>
+        {% if request.user.username == 'root' %}
         <th>操作</th>
+      {% endif %}
       </tr>
     </thead>
     <tbody id="table-body">
@@ -235,6 +237,8 @@
 
     const totalPages = Math.ceil(records.length / rowsPerPage);
 
+    const isRoot = {% if request.user.username == 'root' %}true{% else %}false{% endif %};
+
     function renderTable() {
   const tbody = document.getElementById('table-body');
   tbody.innerHTML = '';
@@ -253,7 +257,7 @@
       const zoom = 18;
       const width = 200;
       const height = 100;
-      const ak = '6FNB6UZDgJ9OlPSsPe9E4oopNvP9Saaj';  // 🔁 替换为你的百度地图密钥
+      const ak = '6FNB6UZDgJ9OlPSsPe9E4oopNvP9Saaj';  // 替换为你的百度地图密钥
 
       locationImage = `
         <img src="https://api.map.baidu.com/staticimage/v2?ak=${ak}&center=${lng},${lat}&width=${width}&height=${height}&zoom=${zoom}" 
@@ -271,11 +275,13 @@
       <td>${record.time}</td>
       <td>${record.location}</td>
       <td>${locationImage}</td>
-      <td>
-        <button class="btn-delete" onclick="deleteRecord(${record.id})" title="删除记录">
-          删除
-        </button>
-      </td>
+      ${isRoot ? `
+  <td>
+    <button class="btn-delete" onclick="deleteRecord(${record.id})" title="删除记录">
+      删除
+    </button>
+  </td>
+` : ''}
     `;
 
     tbody.appendChild(tr);
