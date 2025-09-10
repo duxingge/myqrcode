@@ -90,7 +90,6 @@ class InspectionListView(ListView):
     model = InspectionRecord
     template_name = 'inspection_list.html'
     context_object_name = 'records'
-    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()

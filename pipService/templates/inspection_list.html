@@ -69,6 +69,13 @@
       background-color: #0056b3;
     }
 
+    #jump-page {
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: center;
+    }
+
     form {
       display: flex;
       gap: 10px;
@@ -206,7 +213,9 @@
   <div class="pagination">
     <button onclick="prevPage()">上一页</button>
     <div style="padding-top:10px">
-      <span id="page-info">第 1 页</span>
+      <span id="page-info">第 1 页 / 共 1 页</span>
+      <input type="number" id="jump-page" min="1" value="1" style="width: 50px; margin: 0 5px;">
+      <button onclick="jumpToPage()">跳转</button>
     </div>
     <button onclick="nextPage()">下一页</button>
   </div>
@@ -216,7 +225,7 @@
 
   <script>
     // 数据初始化
-    const rowsPerPage = 6;
+    const rowsPerPage = 10;
     let currentPage = 1;
 
     let records = [
@@ -287,7 +296,22 @@
     tbody.appendChild(tr);
   });
 
-  document.getElementById('page-info').textContent = `第 ${currentPage} 页`;
+  document.getElementById('page-info').textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
+}
+
+function jumpToPage() {
+  const pageInput = document.getElementById('jump-page');
+  let pageNum = parseInt(pageInput.value);
+  
+  if (isNaN(pageNum) || pageNum < 1) {
+    pageNum = 1;
+  } else if (pageNum > totalPages) {
+    pageNum = totalPages;
+  }
+  
+  currentPage = pageNum;
+  pageInput.value = currentPage;
+  renderTable();
 }
 
 function deleteRecord(recordId) {
