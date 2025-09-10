@@ -388,7 +388,6 @@ function getCookie(name) {
       });
 
       const baseUrl = window.location.origin + window.location.pathname;
-      log.d(`${baseUrl}?${params.toString()}`)
       window.location.href = `${baseUrl}?${params.toString()}`;
     }
 
