@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.http import HttpResponse
-from .models import Pipelines
+from .models import Pipelines, CustomUser
 import pandas as pd
 from datetime import datetime
 from django.conf import settings
@@ -22,7 +22,6 @@ from datetime import datetime
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
-from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.contrib.auth.decorators import user_passes_test
@@ -95,7 +94,7 @@ class InspectionListView(ListView):
         queryset = super().get_queryset()
         
         # 获取查询参数
-        name = self.request.GET.get('name')
+        name = self.request.GET.get('inspector')
         stake_number = self.request.GET.get('stake_number')
         start_time = self.request.GET.get('start_time')
         end_time = self.request.GET.get('end_time')
@@ -136,12 +135,12 @@ def inspector_search_api(request):
     """巡检人模糊查询接口"""
     keyword = request.GET.get('keyword', '').strip()
     
-    # if not keyword:
-    #     return JsonResponse([], safe=False)
-    
-    # 获取所有匹配的巡检人（去重）
-    inspectors = User.objects.filter(
-        Q(username__icontains=keyword),
+    # 使用自定义用户模型而不是 auth.User
+    inspectors = CustomUser.objects.filter(
+        Q(username__icontains=keyword) |
+        Q(first_name__icontains=keyword) |
+        Q(last_name__icontains=keyword) |
+        Q(email__icontains=keyword),
         Q(inspectionrecord__isnull=False)  # 确保有巡检记录
     ).distinct().values_list('username', flat=True)
     

@@ -174,14 +174,14 @@
     <label for="inspector">姓名：</label>
     <input type="text" id="inspector" name="inspector" autocomplete="off">
 
-    <label for="pile">桩号：</label>
-    <input type="text" id="pile" name="pile" autocomplete="off">
+    <label for="stake_number">桩号：</label>
+    <input type="text" id="stake_number" name="stake_number" autocomplete="off">
 
     <label for="start">开始时间：</label>
-    <input type="datetime-local" id="start_time" name="start_time" value="start_time">
+    <input type="datetime-local" id="start_time" name="start_time">
 
     <label for="end">结束时间：</label>
-    <input type="datetime-local" id="end_time" name="end_time" value="end_time">
+    <input type="datetime-local" id="end_time" name="end_time">
 
     <button type="submit">查询</button>
   </form>
@@ -221,7 +221,7 @@
   </div>
 
   <div id="inspector-suggestions" class="suggestion-box"></div>
-  <div id="pile-suggestions" class="suggestion-box"></div>
+  <div id="stake_number-suggestions" class="suggestion-box"></div>
 
   <script>
     // 数据初始化
@@ -388,6 +388,7 @@ function getCookie(name) {
       });
 
       const baseUrl = window.location.origin + window.location.pathname;
+      log.d(`${baseUrl}?${params.toString()}`)
       window.location.href = `${baseUrl}?${params.toString()}`;
     }
 
@@ -397,12 +398,12 @@ function getCookie(name) {
     // 页面加载时，填充表单字段
     document.addEventListener('DOMContentLoaded', function() {
       const inspector = localStorage.getItem('inspector');
-      const pile = localStorage.getItem('pile');
+      const stake_number = localStorage.getItem('stake_number');
       const start = localStorage.getItem('start_time');
       const end = localStorage.getItem('end_time');
 
       if (inspector) document.getElementById('inspector').value = inspector;
-      if (pile) document.getElementById('pile').value = pile;
+      if (stake_number) document.getElementById('stake_number').value = stake_number;
       if (start) document.getElementById('start_time').value = start;
       if (end) document.getElementById('end_time').value = end;
 
@@ -411,7 +412,7 @@ function getCookie(name) {
         '/pipline/inspection/inspector/search/', 
         '/pipline/inspection/inspector/search/?keyword=', '👤');
 
-      setupAutocomplete('pile', 'pile-suggestions', 
+      setupAutocomplete('stake_number', 'stake_number-suggestions', 
         '/pipline/inspection/stake-numbers/search/?keyword=', 
         '/pipline/inspection/stake-numbers/search/?keyword=', '📍');
     });
